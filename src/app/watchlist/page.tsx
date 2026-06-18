@@ -12,25 +12,25 @@ export default function WatchlistPage() {
   const suggestions = searchStocks('')
 
   return (
-    <div className="space-y-6">
-      <section className="rounded-3xl border border-border bg-gradient-to-br from-surface via-surface to-base p-6 shadow-panel">
-        <div className="flex items-start gap-4">
-          <div className="rounded-2xl bg-warn/10 p-3 text-warn">
-            <Eye className="h-6 w-6" />
+    <div className="space-y-4">
+      <section className="min-w-0 rounded-lg border border-border bg-surface p-4">
+        <div className="flex items-start gap-3">
+          <div className="rounded-md border border-border bg-base p-2 text-warn">
+            <Eye className="h-5 w-5" />
           </div>
           <div>
-            <h1 className="text-3xl font-semibold text-primary">Watchlists</h1>
-            <p className="mt-2 max-w-3xl text-sm text-secondary">
+            <h1 className="text-xl font-semibold text-primary">Watchlists</h1>
+            <p className="mt-1 max-w-3xl text-sm leading-5 text-secondary">
               Keep a lightweight pulse on your shortlist with live sample price moves, DVM changes, and analyst stance.
             </p>
           </div>
         </div>
       </section>
 
-      <section className="rounded-3xl border border-border bg-surface/90 p-5 shadow-panel">
+      <section className="rounded-lg border border-border bg-surface p-4">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-lg font-semibold text-primary">Suggested Adds</h3>
+            <h3 className="text-base font-semibold text-primary">Suggested Adds</h3>
             <p className="mt-1 text-sm text-secondary">Pulled from the same stock universe as the screener.</p>
           </div>
         </div>
@@ -38,7 +38,7 @@ export default function WatchlistPage() {
         <div className="mt-4 flex flex-wrap gap-2">
           {suggestions.slice(0, 6).map((stock) => (
             <button
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-base px-3 py-1.5 text-xs text-primary transition hover:border-accent"
+              className="inline-flex items-center gap-2 rounded-md border border-border bg-base px-3 py-1.5 text-xs text-primary transition hover:border-accent"
               key={stock.ticker}
               onClick={() => addTicker(stock.ticker)}
               type="button"
@@ -50,7 +50,7 @@ export default function WatchlistPage() {
         </div>
       </section>
 
-      <section className="rounded-3xl border border-border bg-surface/90 p-5 shadow-panel">
+      <section className="rounded-lg border border-border bg-surface p-4">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-border text-sm">
             <thead className="text-left text-xs uppercase tracking-[0.2em] text-muted">
@@ -82,7 +82,7 @@ export default function WatchlistPage() {
                   <td className="py-4 pr-4 text-primary">{row.analystConsensus}</td>
                   <td className="py-4 pr-4">
                     <button
-                      className="rounded-full border border-border px-3 py-1.5 text-xs text-primary transition hover:border-loss hover:text-loss"
+                      className="rounded-md border border-border px-3 py-1.5 text-xs text-primary transition hover:border-loss hover:text-loss"
                       onClick={() => removeTicker(row.ticker)}
                       type="button"
                     >
@@ -98,4 +98,3 @@ export default function WatchlistPage() {
     </div>
   )
 }
-

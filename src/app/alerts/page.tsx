@@ -10,26 +10,25 @@ export default function AlertsPage() {
   const { alerts, createAlert, toggleAlert, removeAlert } = useAlerts()
 
   return (
-    <div className="space-y-6">
-      <section className="rounded-3xl border border-border bg-gradient-to-br from-surface via-surface to-base p-6 shadow-panel">
-        <div className="flex items-start gap-4">
-          <div className="rounded-2xl bg-accent/10 p-3 text-accent">
-            <Bell className="h-6 w-6" />
+    <div className="space-y-4">
+      <section className="rounded-lg border border-border bg-surface p-4">
+        <div className="flex items-start gap-3">
+          <div className="rounded-md border border-border bg-base p-2 text-accent">
+            <Bell className="h-5 w-5" />
           </div>
           <div>
-            <h1 className="text-3xl font-semibold text-primary">Alerts Engine</h1>
-            <p className="mt-2 max-w-3xl text-sm text-secondary">
+            <h1 className="text-xl font-semibold text-primary">Alerts Engine</h1>
+            <p className="mt-1 max-w-3xl text-sm leading-5 text-secondary">
               Create signal-driven workflows for price, DVM, volume, and event-based nudges using demo realtime feeds.
             </p>
           </div>
         </div>
       </section>
 
-      <div className="grid gap-6 xl:grid-cols-[0.9fr_1.4fr]">
+      <div className="grid gap-4 xl:grid-cols-[0.9fr_1.4fr]">
         <AlertForm onCreate={createAlert} />
         <AlertsList alerts={alerts} onRemove={removeAlert} onToggle={toggleAlert} />
       </div>
     </div>
   )
 }
-

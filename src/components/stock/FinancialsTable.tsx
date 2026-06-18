@@ -49,7 +49,7 @@ export function FinancialsTable({ financials }: FinancialsTableProps) {
   ]
 
   return (
-    <section className="rounded-3xl border border-border bg-surface p-5 shadow-panel">
+    <section className="min-w-0 rounded-lg border border-border bg-surface p-4">
       <div className="mb-5 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.24em] text-secondary">
@@ -66,7 +66,7 @@ export function FinancialsTable({ financials }: FinancialsTableProps) {
         <div className="grid gap-3 md:grid-cols-3">
           {summaries.map(({ detail, icon: Icon, label, tone, value }) => (
             <article
-              className="rounded-2xl border border-border bg-base p-4"
+              className="rounded-md border border-border bg-base p-3"
               key={label}
             >
               <div className="flex items-center justify-between gap-3">

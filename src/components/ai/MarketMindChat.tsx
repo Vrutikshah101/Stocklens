@@ -29,7 +29,7 @@ export function MarketMindChat() {
   }
 
   return (
-    <section className="rounded-3xl border border-border bg-surface/90 p-5 shadow-panel">
+    <section className="rounded-lg border border-border bg-surface p-4">
       <div className="flex items-center justify-between">
         <div>
           <div className="flex items-center gap-2 text-sm font-medium text-ai">
@@ -40,7 +40,7 @@ export function MarketMindChat() {
             Calm, explainable prompts layered on top of live sample data.
           </p>
         </div>
-        <div className="rounded-full border border-ai/30 bg-ai/10 px-3 py-1 text-xs text-ai">
+        <div className="rounded-md border border-ai/30 bg-ai/10 px-2.5 py-1 text-xs text-ai">
           Demo Mode
         </div>
       </div>
@@ -52,7 +52,7 @@ export function MarketMindChat() {
             <div
               key={message}
               className={cn(
-                'rounded-2xl px-4 py-3 text-sm',
+                'rounded-md border border-border px-3 py-2 text-sm',
                 isUser ? 'bg-accent/10 text-primary' : 'bg-base/70 text-secondary',
               )}
             >
@@ -69,7 +69,7 @@ export function MarketMindChat() {
         {suggestions.map((suggestion) => (
           <button
             key={suggestion}
-            className="rounded-full border border-border bg-base px-3 py-1.5 text-xs text-secondary transition hover:border-accent hover:text-primary"
+            className="rounded-md border border-border bg-base px-3 py-1.5 text-xs text-secondary transition hover:border-accent hover:text-primary"
             onClick={() => respond(suggestion)}
             type="button"
           >
@@ -80,13 +80,13 @@ export function MarketMindChat() {
 
       <div className="mt-4 flex gap-2">
         <input
-          className="h-11 flex-1 rounded-2xl border border-border bg-base px-4 text-sm outline-none ring-0 transition placeholder:text-muted focus:border-accent"
+          className="h-9 min-w-0 flex-1 rounded-md border border-border bg-base px-3 text-sm outline-none ring-0 transition placeholder:text-muted focus:border-accent"
           onChange={(event) => setPrompt(event.target.value)}
           placeholder="Ask for a risk summary, valuation take, or sector snapshot"
           value={prompt}
         />
         <button
-          className="inline-flex h-11 items-center gap-2 rounded-2xl bg-accent px-4 text-sm font-medium text-white transition hover:brightness-110"
+          className="inline-flex h-9 items-center gap-2 rounded-md bg-accent px-3 text-sm font-medium text-white transition hover:brightness-110"
           onClick={() => respond(prompt)}
           type="button"
         >
@@ -115,4 +115,3 @@ function buildResponse(prompt: string) {
 
   return 'The clearest theme today is selective strength: higher-quality large caps are leading, while leverage-heavy names need more confirmation.'
 }
-

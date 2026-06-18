@@ -108,7 +108,7 @@ export function TechnicalChart({
     ((lastPoint.close - firstPoint.close) / firstPoint.close) * 100
 
   return (
-    <section className="rounded-3xl border border-border bg-surface/90 p-5 shadow-panel">
+    <section className="rounded-lg border border-border bg-surface p-4">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.24em] text-secondary">
@@ -126,7 +126,7 @@ export function TechnicalChart({
           {(['1W', '1M', 'ALL'] as WindowKey[]).map((item) => (
             <button
               className={cn(
-                'rounded-full border px-3 py-2 text-sm transition',
+                'rounded-md border px-3 py-1.5 text-sm transition',
                 windowKey === item
                   ? 'border-accent bg-accent/10 text-accent'
                   : 'border-border bg-base/70 text-secondary hover:border-accent',
@@ -142,7 +142,7 @@ export function TechnicalChart({
       </div>
 
       <div className="mt-5 grid gap-3 md:grid-cols-4">
-        <article className="rounded-2xl border border-border bg-base/70 p-4">
+        <article className="rounded-md border border-border bg-base/70 p-3">
           <div className="flex items-center gap-2 text-secondary">
             <Activity className="h-4 w-4" />
             <span className="text-xs uppercase tracking-[0.2em] text-secondary">
@@ -153,7 +153,7 @@ export function TechnicalChart({
             {formatPct(windowChange)}
           </p>
         </article>
-        <article className="rounded-2xl border border-border bg-base/70 p-4">
+        <article className="rounded-md border border-border bg-base/70 p-3">
           <span className="text-xs uppercase tracking-[0.2em] text-secondary">
             Range high
           </span>
@@ -161,7 +161,7 @@ export function TechnicalChart({
             {formatCurrency(chart.maxClose)}
           </p>
         </article>
-        <article className="rounded-2xl border border-border bg-base/70 p-4">
+        <article className="rounded-md border border-border bg-base/70 p-3">
           <span className="text-xs uppercase tracking-[0.2em] text-secondary">
             Range low
           </span>
@@ -169,7 +169,7 @@ export function TechnicalChart({
             {formatCurrency(chart.minClose)}
           </p>
         </article>
-        <article className="rounded-2xl border border-border bg-base/70 p-4">
+        <article className="rounded-md border border-border bg-base/70 p-3">
           <div className="flex items-center gap-2 text-secondary">
             <BarChart3 className="h-4 w-4" />
             <span className="text-xs uppercase tracking-[0.2em] text-secondary">
@@ -182,7 +182,7 @@ export function TechnicalChart({
         </article>
       </div>
 
-      <div className="mt-5 rounded-[28px] border border-border bg-base/70 p-4">
+      <div className="mt-4 rounded-lg border border-border bg-base/70 p-3">
         <svg
           aria-label="Technical chart"
           className="h-auto w-full"

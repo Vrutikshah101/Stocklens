@@ -13,17 +13,17 @@ interface AlertsListProps {
 
 export function AlertsList({ alerts, onToggle, onRemove }: AlertsListProps) {
   return (
-    <section className="rounded-3xl border border-border bg-surface/90 p-5 shadow-panel">
+    <section className="rounded-lg border border-border bg-surface p-4">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-primary">Active Alerts</h3>
+          <h3 className="text-base font-semibold text-primary">Active Alerts</h3>
           <p className="mt-1 text-sm text-secondary">Triggered alerts stay visible so decision-making stays auditable.</p>
         </div>
       </div>
 
       <div className="mt-4 space-y-3">
         {alerts.map((alert) => (
-          <article className="rounded-2xl border border-border bg-base/50 p-4" key={alert.id}>
+          <article className="rounded-md border border-border bg-base/50 p-3" key={alert.id}>
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="flex items-start gap-3">
                 <div
@@ -46,14 +46,14 @@ export function AlertsList({ alerts, onToggle, onRemove }: AlertsListProps) {
 
               <div className="flex items-center gap-2">
                 <button
-                  className="rounded-full border border-border px-3 py-1.5 text-xs text-primary transition hover:border-accent"
+                  className="rounded-md border border-border px-3 py-1.5 text-xs text-primary transition hover:border-accent"
                   onClick={() => onToggle(alert.id)}
                   type="button"
                 >
                   {alert.active ? 'Mute' : 'Re-arm'}
                 </button>
                 <button
-                  className="rounded-full border border-border p-2 text-secondary transition hover:border-loss hover:text-loss"
+                  className="rounded-md border border-border p-2 text-secondary transition hover:border-loss hover:text-loss"
                   onClick={() => onRemove(alert.id)}
                   type="button"
                 >
@@ -67,4 +67,3 @@ export function AlertsList({ alerts, onToggle, onRemove }: AlertsListProps) {
     </section>
   )
 }
-

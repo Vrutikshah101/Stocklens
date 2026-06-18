@@ -4,7 +4,6 @@ import { useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboa
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import {
-  Clock3,
   Menu,
   MoonStar,
   Search,
@@ -21,7 +20,6 @@ import { cn, formatCurrency, formatPct } from '@/lib/utils/formatters'
 import { useUIStore } from '@/store/uiStore'
 import type { UserProfile } from '@/types/user'
 
-import { Badge } from '../ui/Badge'
 import { Button } from '../ui/Button'
 import { Input } from '../ui/Input'
 import { Tooltip } from '../ui/Tooltip'
@@ -87,7 +85,7 @@ export function TopBar({ user }: TopBarProps) {
   )
 
   const indices = useMemo(() => getMarketIndices(step).slice(0, 3), [step])
-  const topBarOffset = sidebarOpen ? 'lg:left-[19rem]' : 'lg:left-[6.5rem]'
+  const topBarOffset = sidebarOpen ? 'lg:left-[15rem]' : 'lg:left-[4.75rem]'
 
   const selectSuggestion = (ticker: string) => {
     setQuery(ticker)
@@ -124,8 +122,8 @@ export function TopBar({ user }: TopBarProps) {
   }
 
   return (
-    <header className={cn('fixed inset-x-0 top-0 z-30 px-3 pt-3 transition-[left] duration-300 md:px-4 lg:right-3', topBarOffset)}>
-      <div className="panel-elevated mx-auto flex max-w-7xl items-center gap-3 rounded-[28px] px-3 py-3 md:px-4">
+    <header className={cn('fixed inset-x-0 top-0 z-30 border-b border-[#30363d] bg-[#161b22] transition-[left] duration-300 lg:right-0', topBarOffset)}>
+      <div className="mx-auto flex h-[52px] max-w-[1440px] items-center gap-3 px-3 md:px-5">
         <Button
           className="shrink-0"
           leadingIcon={<Menu className="h-4 w-4" />}
@@ -134,18 +132,9 @@ export function TopBar({ user }: TopBarProps) {
           variant="secondary"
         />
 
-        <div className="hidden min-w-0 md:block">
-          <p className="text-sm font-semibold text-primary">StockLens shell</p>
-          <p className="text-xs text-muted">
-            {pathname?.startsWith('/login') || pathname?.startsWith('/register')
-              ? 'Auth demo with local session state'
-              : 'Responsive analytics workspace'}
-          </p>
-        </div>
-
         <div className="relative flex-1" ref={rootRef}>
           <Input
-            className="pr-12"
+            className="h-8 rounded-md border-[#30363d] bg-[#0d1117] pr-12 text-[13px] text-[#e6edf3]"
             leading={<Search className="h-4 w-4" />}
             onChange={(event) => {
               setQuery(event.target.value)
@@ -154,7 +143,7 @@ export function TopBar({ user }: TopBarProps) {
             }}
             onFocus={() => setOpen(true)}
             onKeyDown={handleKeyDown}
-            placeholder="Search Indian equities"
+            placeholder="Search stocks, e.g. TCS, HDFC Bank..."
             ref={inputRef}
             trailing={
               query ? (
@@ -170,7 +159,7 @@ export function TopBar({ user }: TopBarProps) {
                   <X className="h-3.5 w-3.5" />
                 </button>
               ) : (
-                <span className="hidden rounded-full border border-border px-2 py-1 text-[10px] uppercase tracking-[0.18em] text-muted md:inline-flex">
+                <span className="hidden rounded-md border border-[#30363d] px-2 py-1 text-[10px] uppercase text-[#8b949e] md:inline-flex">
                   /
                 </span>
               )
@@ -178,12 +167,12 @@ export function TopBar({ user }: TopBarProps) {
             value={query}
           />
           {open ? (
-            <div className="panel-elevated absolute left-0 right-0 top-[calc(100%+0.75rem)] overflow-hidden rounded-[26px] p-2 transition-all duration-200">
+            <div className="absolute left-0 right-0 top-[calc(100%+0.35rem)] z-50 overflow-hidden rounded-lg border border-[#30363d] bg-[#1c2128] p-1 shadow-[0_12px_32px_rgba(0,0,0,0.5)]">
               <div className="flex items-center justify-between px-3 py-2">
-                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">
+                <p className="text-[10px] font-semibold uppercase text-[#8b949e]">
                   {query ? 'Search results' : 'Quick jump'}
                 </p>
-                <p className="text-xs text-muted">Simulated market data</p>
+                <p className="text-[10px] text-[#8b949e]">Simulated market data</p>
               </div>
               <div className="space-y-1">
                 {suggestions.length ? (
@@ -193,10 +182,10 @@ export function TopBar({ user }: TopBarProps) {
                     return (
                       <button
                         className={cn(
-                          'flex w-full items-center justify-between gap-4 rounded-2xl px-3 py-3 text-left transition',
+                          'flex w-full items-center justify-between gap-4 rounded-md px-3 py-2.5 text-left transition',
                           index === activeIndex
-                            ? 'bg-[var(--color-accent-blue-soft)]'
-                            : 'hover:bg-[var(--color-surface-soft)]',
+                            ? 'bg-[#21262d]'
+                            : 'hover:bg-[#21262d]',
                         )}
                         key={item.ticker}
                         onClick={() => selectSuggestion(item.ticker)}
@@ -204,14 +193,14 @@ export function TopBar({ user }: TopBarProps) {
                         type="button"
                       >
                         <div className="min-w-0">
-                          <p className="text-sm font-medium text-primary">
+                          <p className="text-[13px] font-semibold text-[#e6edf3]">
                             {item.ticker}
-                            <span className="ml-2 text-secondary">{item.name}</span>
+                            <span className="ml-2 text-[#8b949e]">{item.name}</span>
                           </p>
-                          <p className="truncate text-xs text-muted">{item.sector}</p>
+                          <p className="truncate text-[11px] text-[#8b949e]">{item.sector}</p>
                         </div>
                         <div className="text-right">
-                          <p className="text-sm font-medium text-primary">{formatCurrency(item.price.current)}</p>
+                          <p className="font-mono text-xs font-medium text-[#e6edf3]">{formatCurrency(item.price.current)}</p>
                           <p
                             className={cn(
                               'text-xs font-medium',
@@ -225,9 +214,9 @@ export function TopBar({ user }: TopBarProps) {
                     )
                   })
                 ) : (
-                  <div className="rounded-2xl px-3 py-4 text-sm text-secondary">
-                    No matches yet. Try a ticker like <span className="text-primary">RELIANCE</span> or a sector like{' '}
-                    <span className="text-primary">Financials</span>.
+                  <div className="rounded-md px-3 py-4 text-sm text-[#8b949e]">
+                    No matches yet. Try <span className="text-[#e6edf3]">RELIANCE</span> or{' '}
+                    <span className="text-[#e6edf3]">Financials</span>.
                   </div>
                 )}
               </div>
@@ -241,9 +230,9 @@ export function TopBar({ user }: TopBarProps) {
             const TrendIcon = positive ? TrendingUp : TrendingDown
 
             return (
-              <div className="rounded-2xl border border-border bg-[var(--color-surface-soft)] px-3 py-2" key={index.symbol}>
+              <div className="rounded-md bg-[#21262d] px-3 py-1.5" key={index.symbol}>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-medium text-primary">{index.symbol}</span>
+                  <span className="text-[10px] font-medium text-[#8b949e]">{index.symbol}</span>
                   <TrendIcon
                     className={cn(
                       'h-3.5 w-3.5',
@@ -251,17 +240,13 @@ export function TopBar({ user }: TopBarProps) {
                     )}
                   />
                 </div>
-                <p className="mt-1 text-xs text-secondary">
+                <p className="mt-1 font-mono text-[11px] text-[#e6edf3]">
                   {formatCurrency(index.value)} · {formatPct(index.changePct)}
                 </p>
               </div>
             )
           })}
         </div>
-
-        <Badge className="hidden md:inline-flex" dot variant={marketStatus.isOpen ? 'success' : 'warning'}>
-          {marketStatus.label}
-        </Badge>
 
         <Tooltip content={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>
           <Button
@@ -274,19 +259,8 @@ export function TopBar({ user }: TopBarProps) {
         </Tooltip>
 
         <Link className="hidden md:block" href="/login">
-          <div className="rounded-[22px] border border-border bg-[var(--color-surface-soft)] px-3 py-2">
-            <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-[rgba(124,156,255,0.14)] text-sm font-semibold text-[var(--color-accent-blue)]">
-                {user?.avatarInitials ?? 'SL'}
-              </div>
-              <div className="min-w-0">
-                <p className="text-sm font-medium text-primary">{user?.name ?? 'Local demo'}</p>
-                <div className="flex items-center gap-2 text-xs text-muted">
-                  <Clock3 className="h-3 w-3" />
-                  <span>{marketStatus.isOpen ? 'Live session' : 'After-hours prep'}</span>
-                </div>
-              </div>
-            </div>
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[linear-gradient(135deg,#2f81f7,#8b5cf6)] text-xs font-bold text-white">
+            {user?.avatarInitials ?? 'U'}
           </div>
         </Link>
 

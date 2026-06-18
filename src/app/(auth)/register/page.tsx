@@ -60,7 +60,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)]">
+    <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)]">
       <Card>
         <CardHeader>
           <Badge icon={<Building2 className="h-3.5 w-3.5" />} variant="default">
@@ -121,7 +121,7 @@ export default function RegisterPage() {
                 </Select>
               </div>
 
-              <div className="rounded-[26px] border border-border bg-[var(--color-surface-soft)] p-4">
+              <div className="rounded-md border border-border bg-base p-3">
                 <p className="text-sm font-medium text-primary">How this prototype handles sign-up</p>
                 <p className="mt-2 text-sm leading-6 text-secondary">
                   Your form choices stay on the page for context, while the shared demo identity activates behind the scenes so the rest of the shell remains coherent.
@@ -129,7 +129,7 @@ export default function RegisterPage() {
               </div>
 
               {submitted ? (
-                <div className="rounded-[24px] border border-[rgba(124,156,255,0.22)] bg-[var(--color-accent-blue-soft)] p-4 text-sm leading-6 text-secondary">
+                <div className="rounded-md border border-[rgba(47,129,247,0.35)] bg-[var(--color-accent-blue-soft)] p-3 text-sm leading-5 text-secondary">
                   <p className="font-medium text-primary">Workspace created</p>
                   <p className="mt-2">
                     {fullName || 'Your'} preferences are staged for the <span className="text-primary">{selectedPlan?.label}</span> experience.
@@ -148,7 +148,7 @@ export default function RegisterPage() {
                   Create demo workspace
                 </Button>
                 <Link
-                  className="inline-flex h-11 items-center justify-center rounded-2xl bg-[var(--color-surface-strong)] px-4 text-sm font-medium text-primary transition hover:bg-[var(--color-bg-elevated)]"
+                  className="inline-flex h-9 items-center justify-center rounded-md border border-border bg-[var(--color-bg-elevated)] px-4 text-sm font-medium text-primary transition hover:bg-[#30363d]"
                   href="/login"
                 >
                   Already have a session?
@@ -163,22 +163,22 @@ export default function RegisterPage() {
         </CardFooter>
       </Card>
 
-      <div className="space-y-6">
+      <div className="space-y-4">
         <Card>
           <CardHeader>
             <Badge variant="info">Why this flow works</Badge>
             <CardTitle>Compact by design</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-sm leading-6 text-secondary">
-            <div className="rounded-[24px] border border-border bg-[var(--color-surface-soft)] p-4">
+            <div className="rounded-md border border-border bg-base p-3">
               <p className="font-medium text-primary">Low cognitive load</p>
               <p className="mt-2">Only the decisions that influence the prototype are surfaced: role, plan, and a trusted email anchor.</p>
             </div>
-            <div className="rounded-[24px] border border-border bg-[var(--color-surface-soft)] p-4">
+            <div className="rounded-md border border-border bg-base p-3">
               <p className="font-medium text-primary">Shared identity model</p>
               <p className="mt-2">The current implementation keeps a single demo profile so nav, search, and shell state never drift out of sync.</p>
             </div>
-            <div className="rounded-[24px] border border-border bg-[var(--color-surface-soft)] p-4">
+            <div className="rounded-md border border-border bg-base p-3">
               <p className="font-medium text-primary">Future-safe shell</p>
               <p className="mt-2">As feature pages arrive, the same layout already carries theme, market timing, and responsive navigation.</p>
             </div>

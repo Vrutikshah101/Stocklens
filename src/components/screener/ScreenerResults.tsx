@@ -11,10 +11,10 @@ interface ScreenerResultsProps {
 
 export function ScreenerResults({ results }: ScreenerResultsProps) {
   return (
-    <section className="rounded-3xl border border-border bg-surface/90 p-5 shadow-panel">
+    <section className="min-w-0 rounded-lg border border-border bg-surface p-4">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-primary">Results</h3>
+          <h3 className="text-base font-semibold text-primary">Results</h3>
           <p className="mt-1 text-sm text-secondary">
             {results.length} stocks match the current thesis.
           </p>
@@ -52,7 +52,7 @@ export function ScreenerResults({ results }: ScreenerResultsProps) {
                 <td className="py-4 pr-4 text-primary">{result.dvm.toFixed(0)}</td>
                 <td className="py-4 pr-4">
                   <Link
-                    className="rounded-full border border-border px-3 py-1.5 text-xs text-primary transition hover:border-accent hover:text-accent"
+                    className="rounded-md border border-border px-3 py-1.5 text-xs text-primary transition hover:border-accent hover:text-accent"
                     href={`/stock/${result.ticker}`}
                   >
                     Open
@@ -66,4 +66,3 @@ export function ScreenerResults({ results }: ScreenerResultsProps) {
     </section>
   )
 }
-

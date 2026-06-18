@@ -119,7 +119,7 @@ export default function LoginPage() {
                 />
 
                 {successMessage ? (
-                  <div className="rounded-[24px] border border-[rgba(109,216,174,0.24)] bg-[var(--color-green-soft)] p-4 text-sm leading-6 text-[var(--color-green)]">
+                  <div className="rounded-md border border-[rgba(63,185,80,0.35)] bg-[var(--color-green-soft)] p-3 text-sm leading-5 text-[var(--color-green)]">
                     {successMessage}
                   </div>
                 ) : null}
@@ -152,7 +152,7 @@ export default function LoginPage() {
           </CardFooter>
         </Card>
 
-        <div className="space-y-6">
+        <div className="space-y-4">
           <Card>
             <CardHeader>
               <Badge dot variant={marketStatus.isOpen ? 'success' : 'warning'}>
@@ -162,15 +162,15 @@ export default function LoginPage() {
               <CardDescription>The shell avoids noisy claims and tells you exactly what is simulated right now.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4 text-sm leading-6 text-secondary">
-              <div className="rounded-[24px] border border-border bg-[var(--color-surface-soft)] p-4">
+              <div className="rounded-md border border-border bg-base p-3">
                 <p className="font-medium text-primary">Current session</p>
                 <p className="mt-2">{user ? `${user.name} · ${user.email}` : 'A seeded demo profile appears after hydration.'}</p>
               </div>
-              <div className="rounded-[24px] border border-border bg-[var(--color-surface-soft)] p-4">
+              <div className="rounded-md border border-border bg-base p-3">
                 <p className="font-medium text-primary">Selected tier</p>
                 <p className="mt-2">{activePlan?.subtitle}</p>
               </div>
-              <div className="rounded-[24px] border border-border bg-[var(--color-surface-soft)] p-4">
+              <div className="rounded-md border border-border bg-base p-3">
                 <p className="font-medium text-primary">Market status</p>
                 <p className="mt-2">{marketStatus.hint}</p>
               </div>

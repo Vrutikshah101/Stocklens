@@ -8,9 +8,9 @@ interface CorporateEventsListProps {
 }
 
 const impactTone: Record<CorporateEvent['impact'], string> = {
-  positive: 'border-emerald-500/25 bg-emerald-500/10 text-emerald-700',
+  positive: 'border-[color:var(--color-green)] bg-[color:var(--color-green-soft)] text-gain',
   neutral: 'border-border bg-surface text-primary',
-  negative: 'border-rose-500/25 bg-rose-500/10 text-rose-700',
+  negative: 'border-[color:var(--color-red)] bg-[color:var(--color-red-soft)] text-loss',
 }
 
 export function CorporateEventsList({ events }: CorporateEventsListProps) {
@@ -30,7 +30,7 @@ export function CorporateEventsList({ events }: CorporateEventsListProps) {
   })
 
   return (
-    <section className="rounded-3xl border border-border bg-surface/90 p-5 shadow-panel">
+    <section className="rounded-lg border border-border bg-surface p-4">
       <div className="mb-4">
         <p className="text-xs uppercase tracking-[0.24em] text-secondary">
           Catalyst calendar
@@ -51,22 +51,22 @@ export function CorporateEventsList({ events }: CorporateEventsListProps) {
 
           return (
             <article
-              className="relative rounded-3xl border border-border bg-base/70 p-4 pl-6"
+              className="relative rounded-lg border border-border bg-base/70 p-4 pl-6"
               key={`${event.type}-${event.date}-${event.title}`}
             >
               <span className="absolute left-3 top-5 h-3 w-3 rounded-full bg-sky-400 shadow-[0_0_12px_rgba(56,189,248,0.55)]" />
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="rounded-full border border-border px-2.5 py-1 text-xs text-secondary">
+                    <span className="rounded-md border border-border px-2.5 py-1 text-xs text-secondary">
                       {event.type}
                     </span>
                     <span
-                      className={`rounded-full border px-2.5 py-1 text-xs ${impactTone[event.impact]}`}
+                      className={`rounded-md border px-2.5 py-1 text-xs ${impactTone[event.impact]}`}
                     >
                       {event.impact}
                     </span>
-                    <span className="rounded-full border border-border px-2.5 py-1 text-xs text-secondary">
+                    <span className="rounded-md border border-border px-2.5 py-1 text-xs text-secondary">
                       {isUpcoming ? 'Upcoming' : 'Completed'}
                     </span>
                   </div>
@@ -74,7 +74,7 @@ export function CorporateEventsList({ events }: CorporateEventsListProps) {
                     {event.title}
                   </h3>
                 </div>
-                <div className="rounded-2xl border border-border bg-surface p-3 text-secondary">
+                <div className="rounded-md border border-border bg-surface p-2.5 text-secondary">
                   {event.type === 'Conference Call' ? (
                     <Megaphone className="h-4 w-4" />
                   ) : (

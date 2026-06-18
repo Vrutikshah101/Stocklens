@@ -43,7 +43,7 @@ export function RadarChart({ score, ticker, className }: RadarChartProps) {
   const activeValue = score[activeAxis]
 
   return (
-    <div className={cn('rounded-3xl border border-border bg-surface p-5 shadow-panel', className)}>
+    <div className={cn('rounded-lg border border-border bg-surface p-4', className)}>
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-xs uppercase tracking-[0.2em] text-secondary">DVM Radar</p>
@@ -51,7 +51,7 @@ export function RadarChart({ score, ticker, className }: RadarChartProps) {
         </div>
         <div
           className={cn(
-            'rounded-2xl px-3 py-2 text-right',
+            'rounded-md px-3 py-2 text-right',
             score.tone === 'gain' ? 'text-gain' : score.tone === 'warn' ? 'text-warn' : 'text-loss',
           )}
           style={{
@@ -153,7 +153,7 @@ export function RadarChart({ score, ticker, className }: RadarChartProps) {
                 type="button"
                 onClick={() => setActiveAxis(axis.key)}
                 className={cn(
-                  'rounded-full border px-3 py-2 text-sm font-medium transition',
+                  'rounded-md border px-3 py-1.5 text-sm font-medium transition',
                   activeAxis === axis.key ? 'border-accent bg-elevated text-primary' : 'border-border bg-base text-secondary hover:text-primary',
                 )}
               >
@@ -162,18 +162,18 @@ export function RadarChart({ score, ticker, className }: RadarChartProps) {
             ))}
           </div>
 
-          <div className="rounded-3xl border border-border bg-base p-4">
+          <div className="rounded-lg border border-border bg-base p-3">
             <p className="text-xs uppercase tracking-[0.18em] text-secondary">Focused lens</p>
             <div className="mt-2 flex items-end justify-between gap-4">
               <div>
                 <p className="text-lg font-semibold text-primary">{activeMeta.label}</p>
                 <p className="mt-2 text-sm leading-6 text-secondary">{activeMeta.description}</p>
               </div>
-              <p className="font-mono text-3xl font-semibold text-primary">{activeValue.toFixed(0)}</p>
+              <p className="font-mono text-2xl font-semibold text-primary">{activeValue.toFixed(0)}</p>
             </div>
           </div>
 
-          <div className="rounded-3xl border border-border bg-base p-4">
+          <div className="rounded-lg border border-border bg-base p-3">
             <p className="text-xs uppercase tracking-[0.18em] text-secondary">Signal</p>
             <p
               className={cn(

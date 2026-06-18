@@ -25,10 +25,17 @@ function computeMarketState() {
   }
 }
 
+const DEFAULT_MARKET_STATE = {
+  isOpen: false,
+  label: 'Market Closed',
+  hint: 'Using the latest demo close and overnight prep',
+}
+
 export function useMarketStatus() {
-  const [state, setState] = useState(computeMarketState())
+  const [state, setState] = useState(DEFAULT_MARKET_STATE)
 
   useEffect(() => {
+    setState(computeMarketState())
     const timer = window.setInterval(() => {
       setState(computeMarketState())
     }, 60_000)
@@ -38,4 +45,3 @@ export function useMarketStatus() {
 
   return useMemo(() => state, [state])
 }
-

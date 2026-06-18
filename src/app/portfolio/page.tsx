@@ -13,23 +13,23 @@ export default function PortfolioPage() {
     usePortfolio()
 
   return (
-    <div className="space-y-6">
-      <section className="rounded-3xl border border-border bg-gradient-to-br from-surface via-surface to-base p-6 shadow-panel">
+    <div className="space-y-4">
+      <section className="rounded-lg border border-border bg-surface p-4">
         <div className="flex flex-wrap items-start justify-between gap-4">
-          <div className="flex items-start gap-4">
-            <div className="rounded-2xl bg-gain/10 p-3 text-gain">
-              <BriefcaseBusiness className="h-6 w-6" />
+          <div className="flex items-start gap-3">
+            <div className="rounded-md border border-border bg-base p-2 text-gain">
+              <BriefcaseBusiness className="h-5 w-5" />
             </div>
             <div>
-              <h1 className="text-3xl font-semibold text-primary">Portfolio Manager</h1>
-              <p className="mt-2 max-w-3xl text-sm text-secondary">
+              <h1 className="text-xl font-semibold text-primary">Portfolio Manager</h1>
+              <p className="mt-1 max-w-3xl text-sm leading-5 text-secondary">
                 Track holdings, monitor live sample P&amp;L, and test decision workflows with reusable portfolio modules.
               </p>
             </div>
           </div>
 
           <select
-            className="h-11 rounded-2xl border border-border bg-base px-4 text-sm text-primary outline-none focus:border-accent"
+            className="h-9 rounded-md border border-border bg-base px-3 text-sm text-primary outline-none focus:border-accent"
             onChange={(event) => setSelectedPortfolioId(event.target.value)}
             value={selectedPortfolioId}
           >
@@ -44,7 +44,7 @@ export default function PortfolioPage() {
 
       <PortfolioSummary portfolio={portfolio} />
 
-      <div className="grid gap-6 xl:grid-cols-[1.35fr_0.85fr]">
+      <div className="grid gap-4 xl:grid-cols-[1.35fr_0.85fr]">
         <PortfolioNAVChart points={portfolio.navHistory} />
         <AddTransactionForm
           defaultTicker={pendingTicker}
@@ -57,4 +57,3 @@ export default function PortfolioPage() {
     </div>
   )
 }
-

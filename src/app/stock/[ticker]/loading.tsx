@@ -1,15 +1,14 @@
 function SkeletonBlock({ className }: { className: string }) {
   return (
-    <div className={`animate-pulse rounded-2xl bg-base ${className}`} />
+    <div className={`animate-pulse rounded-md bg-base ${className}`} />
   )
 }
 
 export function StockPageSkeleton() {
   return (
-    <main className="min-h-screen bg-base px-4 py-6 text-primary sm:px-6 lg:px-8">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6">
-        <section className="rounded-[28px] border border-border bg-surface/90 p-6 shadow-panel">
-          <div className="grid gap-6 xl:grid-cols-[1.45fr,0.9fr]">
+    <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-4 text-primary">
+        <section className="rounded-lg border border-border bg-surface p-4">
+          <div className="grid gap-4 xl:grid-cols-[1.45fr,0.9fr]">
             <div className="space-y-4">
               <SkeletonBlock className="h-6 w-32" />
               <SkeletonBlock className="h-12 w-80 max-w-full" />
@@ -21,7 +20,7 @@ export function StockPageSkeleton() {
                 ))}
               </div>
             </div>
-            <div className="space-y-4 rounded-3xl border border-border bg-surface/90 p-5">
+            <div className="space-y-4 rounded-lg border border-border bg-surface p-4">
               <SkeletonBlock className="h-5 w-28" />
               <SkeletonBlock className="h-10 w-40" />
               <SkeletonBlock className="h-4 w-36" />
@@ -38,14 +37,13 @@ export function StockPageSkeleton() {
 
         <SkeletonBlock className="h-14 w-full" />
 
-        <div className="grid gap-6 xl:grid-cols-[1.55fr,0.95fr]">
+        <div className="grid gap-4 xl:grid-cols-[1.55fr,0.95fr]">
           <SkeletonBlock className="h-[420px] w-full" />
           <SkeletonBlock className="h-[420px] w-full" />
         </div>
 
         <SkeletonBlock className="h-[360px] w-full" />
-      </div>
-    </main>
+    </div>
   )
 }
 

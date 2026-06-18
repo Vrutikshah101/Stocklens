@@ -11,10 +11,10 @@ interface HoldingsTableProps {
 
 export function HoldingsTable({ holdings }: HoldingsTableProps) {
   return (
-    <section className="rounded-3xl border border-border bg-surface/90 p-5 shadow-panel">
+    <section className="min-w-0 rounded-lg border border-border bg-surface p-4">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-primary">Holdings</h3>
+          <h3 className="text-base font-semibold text-primary">Holdings</h3>
           <p className="mt-1 text-sm text-secondary">Live sample pricing updates every few seconds.</p>
         </div>
       </div>
@@ -58,4 +58,3 @@ export function HoldingsTable({ holdings }: HoldingsTableProps) {
     </section>
   )
 }
-

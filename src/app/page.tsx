@@ -2,46 +2,38 @@
 
 import { useEffect, useMemo, useState } from 'react'
 
-import { CandlestickChart } from '@/components/charts/CandlestickChart'
-import { FinancialLineChart } from '@/components/charts/FinancialLineChart'
-import { PortfolioNAVChart } from '@/components/charts/PortfolioNAVChart'
-import { RadarChart } from '@/components/charts/RadarChart'
-import { IndexSnapshot } from '@/components/dashboard/IndexSnapshot'
-import { NewsfeedWidget, type NewsfeedEntry } from '@/components/dashboard/NewsfeedWidget'
-import { SectorHeatmapWidget } from '@/components/dashboard/SectorHeatmapWidget'
-import { TopMoversTable } from '@/components/dashboard/TopMoversTable'
 import { useMarketStatus } from '@/hooks/useMarketStatus'
-import { usePortfolio } from '@/hooks/usePortfolio'
-import { useStockData } from '@/hooks/useStockData'
 import {
   getMarketIndices,
   getNewsfeed,
   getSectorHeatmap,
   getTopMovers,
-  getUniverseTickers,
 } from '@/lib/utils/constants'
-import { cn, formatCurrency, formatPct, formatSignedCurrency } from '@/lib/utils/formatters'
-import type { MarketMover } from '@/types/stock'
+import { cn, formatCurrency, formatPct, formatTime } from '@/lib/utils/formatters'
 
-const priceFormatter = new Intl.NumberFormat('en-IN', {
-  maximumFractionDigits: 2,
-  minimumFractionDigits: 2,
+const compactCurrency = new Intl.NumberFormat('en-IN', {
+  maximumFractionDigits: 0,
 })
+
+const fiiDii = [
+  {
+    label: 'FII (Foreign)',
+    value: '+₹1,842 Cr',
+    detail: 'Buy ₹22,400 Cr · Sell ₹20,558 Cr',
+    tone: 'gain',
+  },
+  {
+    label: 'DII (Domestic)',
+    value: '-₹634 Cr',
+    detail: 'Buy ₹14,200 Cr · Sell ₹14,834 Cr',
+    tone: 'loss',
+  },
+] as const
 
 export default function DashboardPage() {
   const marketStatus = useMarketStatus()
-  const {
-    portfolio,
-    pendingTicker,
-    setPendingTicker,
-    selectedPortfolioId,
-    setSelectedPortfolioId,
-    portfolios,
-  } = usePortfolio()
-  const [selectedTicker, setSelectedTicker] = useState(pendingTicker)
-  const [selectedSector, setSelectedSector] = useState<string | null>(null)
-  const [selectedIndex, setSelectedIndex] = useState('NIFTY')
   const [step, setStep] = useState(0)
+  const [selectedSector, setSelectedSector] = useState<string | null>(null)
 
   useEffect(() => {
     setStep(Math.floor(Date.now() / 5000))
@@ -52,410 +44,181 @@ export default function DashboardPage() {
     return () => window.clearInterval(timer)
   }, [])
 
-  useEffect(() => {
-    setSelectedTicker(pendingTicker)
-  }, [pendingTicker])
-
-  useEffect(() => {
-    setPendingTicker(selectedTicker)
-  }, [selectedTicker, setPendingTicker])
-
-  const { data: stock, isLoading } = useStockData(selectedTicker)
-
   const indices = useMemo(() => getMarketIndices(step), [step])
-  const allMovers = useMemo(() => getTopMovers(step), [step])
+  const movers = useMemo(() => getTopMovers(step), [step])
   const heatmap = useMemo(() => getSectorHeatmap(step), [step])
-  const selectedIndexModel = indices.find((index) => index.symbol === selectedIndex) ?? indices[0]
+  const news = useMemo(() => getNewsfeed(step), [step])
 
-  const filteredMovers = useMemo(
-    () => (selectedSector ? allMovers.filter((mover) => mover.sector === selectedSector) : allMovers),
-    [allMovers, selectedSector],
+  const indexCards = useMemo(
+    () => [
+      ...indices.map((index) => ({
+        key: index.symbol,
+        label: index.name,
+        value: compactCurrency.format(index.value),
+        change: `${index.change >= 0 ? '+' : '-'}${compactCurrency.format(Math.abs(index.change))} (${formatPct(index.changePct)})`,
+        tone: index.changePct >= 0 ? 'gain' : 'loss',
+      })),
+      {
+        key: 'NASDAQ',
+        label: 'Nasdaq',
+        value: '19,842',
+        change: '+124 (+0.63%)',
+        tone: 'gain',
+      },
+    ],
+    [indices],
   )
 
-  const heroUniverse = useMemo(() => getUniverseTickers().slice(0, 8), [])
-
-  const newsEntries = useMemo<NewsfeedEntry[]>(() => {
-    const moverMap = new Map(allMovers.map((mover) => [mover.ticker, mover]))
-
-    const baseFeed = getNewsfeed(step).map((item) => {
-      const ticker = item.id.split('-news-')[0] ?? selectedTicker
-      const mover = moverMap.get(ticker)
-      return {
-        ...item,
-        ticker,
-        company: mover?.name ?? ticker,
-        changePct: mover?.changePct ?? 0,
-      }
-    })
-
-    const selectedFeed = stock.news.slice(0, 2).map((item) => ({
-      ...item,
-      ticker: stock.info.ticker,
-      company: stock.info.name,
-      changePct: stock.price.changePct,
-    }))
-
-    return [...selectedFeed, ...baseFeed]
-      .filter((item, index, array) => array.findIndex((candidate) => candidate.id === item.id) === index)
-      .filter((item) => {
-        if (!selectedSector) {
-          return true
-        }
-
-        const mover = moverMap.get(item.ticker)
-        return mover?.sector === selectedSector || item.ticker === stock.info.ticker
-      })
-  }, [allMovers, selectedSector, selectedTicker, step, stock])
-
-  const handleTickerSelect = (ticker: string) => {
-    setSelectedTicker(ticker)
-  }
-
-  const selectedSectorLabel = selectedSector ?? stock.info.sector
-  const leadingMover = filteredMovers[0] ?? allMovers[0]
-  const trailingMover = [...filteredMovers].sort((left, right) => left.changePct - right.changePct)[0] ?? allMovers.at(-1)
+  const visibleMovers = useMemo(() => {
+    const rows = selectedSector ? movers.filter((mover) => mover.sector === selectedSector) : movers
+    return [...rows].sort((left, right) => right.changePct - left.changePct).slice(0, 5)
+  }, [movers, selectedSector])
 
   return (
-    <main className="min-h-screen bg-base text-primary">
-      <div className="mx-auto flex w-full max-w-[1520px] flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
-        <section className="rounded-[32px] border border-border bg-surface p-5 shadow-panel sm:p-6">
-          <div className="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
-            <div className="max-w-3xl min-w-0">
-              <p className="text-xs uppercase tracking-[0.24em] text-secondary">StockLens Dashboard</p>
-              <h1 className="mt-3 max-w-2xl text-2xl font-semibold tracking-tight text-primary sm:text-3xl xl:text-4xl">
-                Interactive Indian market command center
-              </h1>
-              <p className="mt-3 max-w-2xl text-sm leading-7 text-secondary sm:text-base">
-                Track live demo indices, sector rotation, portfolio NAV, and a selected stock&apos;s
-                price structure from one dense workspace.
+    <main className="min-h-screen bg-[#0d1117] text-[#e6edf3]">
+      <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-4 px-4 py-5 sm:px-5 lg:px-6">
+        <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 className="text-xl font-bold leading-tight text-[#e6edf3]">Market Overview</h1>
+            <p className="mt-1 text-xs text-[#8b949e]">Thu, 18 Jun 2026 · live demo tape</p>
+          </div>
+          <div className="inline-flex items-center gap-2 text-xs font-medium text-[#3fb950]">
+            <span className="h-2 w-2 rounded-full bg-[#3fb950] shadow-[0_0_0_4px_rgba(63,185,80,0.12)]" />
+            {marketStatus.isOpen ? 'Market Open' : 'Market Closed'}
+          </div>
+        </header>
+
+        <section className="grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
+          {indexCards.slice(0, 5).map((card) => (
+            <article
+              key={card.key}
+              className="rounded-lg border border-[#30363d] bg-[#161b22] p-3 transition hover:border-[#484f58]"
+            >
+              <p className="text-[10px] font-medium text-[#8b949e]">{card.label}</p>
+              <p className="mt-1 font-mono text-lg font-bold text-[#e6edf3]">{card.value}</p>
+              <p className={cn('mt-1 font-mono text-[11px]', card.tone === 'gain' ? 'text-[#3fb950]' : 'text-[#f85149]')}>
+                {card.change}
               </p>
+            </article>
+          ))}
+        </section>
 
-              <div className="mt-5 flex flex-wrap gap-2">
-                {heroUniverse.map((ticker) => (
+        <section className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_300px]">
+          <Panel title="Sector Heatmap">
+            <div className="grid grid-cols-2 gap-1 sm:grid-cols-3 lg:grid-cols-4">
+              {heatmap.map((cell) => {
+                const isPositive = cell.changePct >= 0
+                const active = selectedSector === cell.sector
+
+                return (
                   <button
-                    key={ticker}
+                    key={cell.sector}
                     type="button"
-                    onClick={() => handleTickerSelect(ticker)}
+                    onClick={() => setSelectedSector(active ? null : cell.sector)}
                     className={cn(
-                      'rounded-full border px-3 py-2 text-sm font-medium transition',
-                      selectedTicker === ticker
-                        ? 'border-accent bg-elevated text-primary'
-                        : 'border-border bg-base text-secondary hover:text-primary',
+                      'min-h-16 rounded px-2 py-2 text-left transition hover:opacity-90',
+                      active ? 'ring-2 ring-[#2f81f7]' : '',
                     )}
+                    style={{ background: sectorColor(cell.changePct) }}
                   >
-                    {ticker}
+                    <p className="truncate text-xs font-semibold text-[#e6edf3]">{cell.sector}</p>
+                    <p className={cn('mt-1 font-mono text-[11px]', isPositive ? 'text-[#7ee787]' : 'text-[#ff7b72]')}>
+                      {formatPct(cell.changePct)}
+                    </p>
                   </button>
-                ))}
-              </div>
+                )
+              })}
             </div>
+          </Panel>
 
-            <div className="grid gap-3 sm:grid-cols-2 xl:w-full xl:max-w-[560px] xl:grid-cols-3">
-              <HeroStat
-                label="Selected stock"
-                value={isLoading ? 'Loading…' : `₹${priceFormatter.format(stock.price.current)}`}
-                detail={stock.info.name}
-                tone={stock.price.changePct >= 0 ? 'gain' : 'loss'}
-                subValue={formatPct(stock.price.changePct)}
-              />
-              <HeroStat
-                label="Portfolio NAV"
-                value={formatCurrency(portfolio.snapshot.nav)}
-                detail={portfolio.name}
-                tone={portfolio.snapshot.totalPnl >= 0 ? 'gain' : 'loss'}
-                subValue={formatSignedCurrency(portfolio.snapshot.dayChange)}
-              />
-              <HeroStat
-                label="Breadth"
-                value={selectedIndexModel?.breadth ?? '—'}
-                detail={selectedIndexModel?.name ?? 'Live benchmark'}
-                tone={selectedIndexModel?.changePct && selectedIndexModel.changePct >= 0 ? 'gain' : 'loss'}
-                subValue={selectedIndexModel ? formatPct(selectedIndexModel.changePct) : '—'}
-              />
-            </div>
-          </div>
-        </section>
-
-        <IndexSnapshot
-          indices={indices}
-          marketStatus={marketStatus}
-          selectedSymbol={selectedIndex}
-          onSelectSymbol={setSelectedIndex}
-        />
-
-        <section className="grid gap-6 xl:grid-cols-[minmax(0,1.55fr)_minmax(320px,0.95fr)]">
-          <div className="min-w-0 space-y-6">
-            <div className="rounded-3xl border border-border bg-surface p-5 shadow-panel">
-              <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
-                <div className="min-w-0">
-                  <p className="text-xs uppercase tracking-[0.2em] text-secondary">Selected Stock</p>
-                  <h2 className="mt-1 text-xl font-semibold text-primary sm:text-2xl">
-                    {stock.info.ticker} · {stock.info.name}
-                  </h2>
-                  <p className="mt-2 max-w-2xl text-sm leading-6 text-secondary">{stock.info.description}</p>
-                </div>
-
-                <div className="grid gap-3 sm:grid-cols-2 xl:w-full xl:max-w-[360px]">
-                  <MetricChip label="Consensus" value={stock.info.analystConsensus} />
-                  <MetricChip label="Fair value" value={formatCurrency(stock.info.fairValue)} />
-                  <MetricChip label="Risk" value={stock.info.riskLevel} />
-                  <MetricChip label="Sector focus" value={selectedSectorLabel} />
-                </div>
-              </div>
-
-              <div className="mt-5">
-                <CandlestickChart ticker={stock.info.ticker} data={stock.history} />
-              </div>
-            </div>
-
-            <FinancialLineChart ticker={stock.info.ticker} financials={stock.financials} />
-          </div>
-
-          <div className="min-w-0 space-y-6">
-            <RadarChart ticker={stock.info.ticker} score={stock.dvm} />
-
-            <PortfolioNAVChart
-              history={portfolio.navHistory}
-              snapshot={portfolio.snapshot}
-              portfolioName={portfolio.name}
-            />
-
-            <div className="rounded-3xl border border-border bg-surface p-5 shadow-panel">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-secondary">Quick Read</p>
-                  <h3 className="mt-1 text-xl font-semibold text-primary">{stock.info.ticker} setup summary</h3>
-                </div>
-                <span
-                  className={cn(
-                    'rounded-full px-3 py-2 text-sm font-medium',
-                    stock.dvm.tone === 'gain'
-                      ? 'text-gain'
-                      : stock.dvm.tone === 'warn'
-                        ? 'text-warn'
-                        : 'text-loss',
-                  )}
-                  style={{
-                    background:
-                      stock.dvm.tone === 'gain'
-                        ? 'color-mix(in srgb, var(--color-green) 14%, var(--color-bg-surface))'
-                        : stock.dvm.tone === 'warn'
-                          ? 'color-mix(in srgb, var(--color-amber) 14%, var(--color-bg-surface))'
-                          : 'color-mix(in srgb, var(--color-red) 14%, var(--color-bg-surface))',
-                  }}
-                >
-                  {stock.dvm.label}
-                </span>
-              </div>
-
-              <div className="mt-5 grid gap-3 md:grid-cols-2">
-                <MiniReadCard label="Current price" value={formatCurrency(stock.price.current)} detail={formatPct(stock.price.changePct)} tone={stock.price.changePct >= 0 ? 'gain' : 'loss'} />
-                <MiniReadCard label="Market cap" value={formatCurrency(stock.info.marketCap)} detail={stock.info.sector} />
-                <MiniReadCard label="Promoter holding" value={`${stock.info.promoterHolding.toFixed(1)}%`} detail="Ownership signal" />
-                <MiniReadCard label="FII flow" value={`${stock.info.fiiFlow.toFixed(1)}`} detail="Institutional trend" tone={stock.info.fiiFlow >= 0 ? 'gain' : 'loss'} />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)]">
-          <SectorHeatmapWidget
-            cells={heatmap}
-            className="xl:order-2"
-            selectedSector={selectedSector}
-            onSelectSector={setSelectedSector}
-          />
-          <TopMoversTable
-            className="xl:order-1"
-            movers={filteredMovers}
-            selectedTicker={selectedTicker}
-            onSelectTicker={handleTickerSelect}
-          />
-        </section>
-
-        <section className="grid gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)]">
-          <div className="rounded-3xl border border-border bg-surface p-5 shadow-panel">
-            <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
-              <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-secondary">Rotation Summary</p>
-                <h3 className="mt-1 text-xl font-semibold text-primary">What the dashboard is saying now</h3>
-              </div>
-
-              <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 xl:max-w-[420px]">
-                <SummaryBadge label="Focus sector" value={selectedSectorLabel} detail="Heatmap sync" />
-                <SummaryBadge label="Leader" value={leadingMover?.ticker ?? '—'} detail={leadingMover ? formatPct(leadingMover.changePct) : '—'} tone={leadingMover?.changePct && leadingMover.changePct >= 0 ? 'gain' : 'loss'} />
-                <SummaryBadge label="Laggard" value={trailingMover?.ticker ?? '—'} detail={trailingMover ? formatPct(trailingMover.changePct) : '—'} tone={trailingMover?.changePct && trailingMover.changePct >= 0 ? 'gain' : 'loss'} />
-              </div>
-            </div>
-
-            <div className="mt-5 grid gap-4 xl:grid-cols-2">
-              {stock.analysts.map((analyst) => (
-                <div key={analyst.broker} className="rounded-3xl border border-border bg-base p-4">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <p className="text-sm font-semibold text-primary">{analyst.broker}</p>
-                      <p className="mt-1 text-xs text-secondary">{analyst.rating} · published view</p>
-                    </div>
-                    <span
-                      className={cn(
-                        'rounded-full px-2.5 py-1 text-xs font-medium',
-                        analyst.rating === 'Buy'
-                          ? 'text-gain'
-                          : analyst.rating === 'Hold'
-                            ? 'text-warn'
-                            : 'text-loss',
-                      )}
-                      style={{
-                        background:
-                          analyst.rating === 'Buy'
-                            ? 'color-mix(in srgb, var(--color-green) 14%, var(--color-bg-surface))'
-                            : analyst.rating === 'Hold'
-                              ? 'color-mix(in srgb, var(--color-amber) 14%, var(--color-bg-surface))'
-                              : 'color-mix(in srgb, var(--color-red) 14%, var(--color-bg-surface))',
-                      }}
-                    >
-                      {analyst.rating}
-                    </span>
-                  </div>
-
-                  <div className="mt-4 flex items-end justify-between gap-3">
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.18em] text-secondary">Target</p>
-                      <p className="mt-1 font-mono text-lg font-semibold text-primary">
-                        {formatCurrency(analyst.targetPrice)}
-                      </p>
-                    </div>
-                    <p className="text-sm text-secondary">{analyst.upsidePct.toFixed(0)}% implied move</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <NewsfeedWidget items={newsEntries} selectedTicker={selectedTicker} onSelectTicker={handleTickerSelect} />
-        </section>
-
-        <section className="rounded-3xl border border-border bg-surface p-5 shadow-panel">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-secondary">Portfolio Context</p>
-              <h3 className="mt-1 text-xl font-semibold text-primary">Switch demo baskets without leaving the dashboard</h3>
-            </div>
-
-            <div className="flex flex-wrap gap-2">
-              {portfolios.map((item) => (
+          <Panel title={selectedSector ? `${selectedSector} movers` : 'Top Gainers'}>
+            <div className="divide-y divide-[#21262d]">
+              {visibleMovers.map((mover) => (
                 <button
-                  key={item.id}
+                  key={mover.ticker}
                   type="button"
-                  onClick={() => setSelectedPortfolioId(item.id)}
-                  className={cn(
-                    'rounded-full border px-3 py-2 text-sm font-medium transition',
-                    selectedPortfolioId === item.id
-                      ? 'border-accent bg-elevated text-primary'
-                      : 'border-border bg-base text-secondary hover:text-primary',
-                  )}
+                  className="flex w-full items-center justify-between gap-3 py-2 text-left transition hover:text-[#2f81f7]"
                 >
-                  {item.name}
+                  <span>
+                    <span className="block text-xs font-semibold">{mover.ticker}</span>
+                    <span className="block font-mono text-[10px] text-[#8b949e]">
+                      {formatCurrency(mover.price)}
+                    </span>
+                  </span>
+                  <span className={cn('font-mono text-xs font-semibold', mover.changePct >= 0 ? 'text-[#3fb950]' : 'text-[#f85149]')}>
+                    {formatPct(mover.changePct)}
+                  </span>
                 </button>
               ))}
             </div>
-          </div>
+          </Panel>
         </section>
+
+        <Panel title="FII / DII Activity · Today">
+          <div className="grid gap-3 md:grid-cols-2">
+            {fiiDii.map((item) => (
+              <div key={item.label} className="rounded-md bg-[#0d1117] p-3">
+                <p className="text-[10px] text-[#8b949e]">{item.label}</p>
+                <p className={cn('mt-1 font-mono text-lg font-bold', item.tone === 'gain' ? 'text-[#3fb950]' : 'text-[#f85149]')}>
+                  {item.value}
+                </p>
+                <p className="mt-1 text-[10px] text-[#484f58]">{item.detail}</p>
+              </div>
+            ))}
+          </div>
+        </Panel>
+
+        <Panel title="Market News">
+          <div className="divide-y divide-[#21262d]">
+            {news.slice(0, 6).map((item) => (
+              <article key={item.id} className="py-3 first:pt-0 last:pb-0">
+                <p className="text-xs leading-5 text-[#e6edf3]">{item.headline}</p>
+                <div className="mt-1 flex flex-wrap items-center gap-2 text-[10px] text-[#8b949e]">
+                  <span>{item.source}</span>
+                  <span className="text-[#484f58]">·</span>
+                  <span>{formatTime(item.publishedAt)}</span>
+                  <span className="rounded-full bg-[#2f81f725] px-2 py-0.5 font-semibold text-[#2f81f7]">
+                    {item.category}
+                  </span>
+                </div>
+              </article>
+            ))}
+          </div>
+        </Panel>
       </div>
     </main>
   )
 }
 
-function HeroStat({
-  label,
-  value,
-  detail,
-  subValue,
-  tone = 'neutral',
-}: {
-  label: string
-  value: string
-  detail: string
-  subValue: string
-  tone?: 'gain' | 'loss' | 'neutral'
-}) {
+function Panel({ children, title }: { children: React.ReactNode; title: string }) {
   return (
-    <div className="rounded-3xl border border-border bg-base p-4">
-      <p className="text-xs uppercase tracking-[0.18em] text-secondary">{label}</p>
-      <p className="mt-2 break-words text-lg font-semibold leading-tight text-primary sm:text-xl">{value}</p>
-      <div className="mt-2 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
-        <p className="text-sm text-secondary">{detail}</p>
-        <p
-          className={cn(
-            'text-sm font-medium',
-            tone === 'gain' ? 'text-gain' : tone === 'loss' ? 'text-loss' : 'text-primary',
-          )}
-        >
-          {subValue}
-        </p>
-      </div>
-    </div>
+    <section className="rounded-lg border border-[#30363d] bg-[#161b22] p-3 sm:p-4">
+      <h2 className="mb-3 text-sm font-semibold text-[#e6edf3]">{title}</h2>
+      {children}
+    </section>
   )
 }
 
-function MetricChip({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-2xl border border-border bg-base px-4 py-3">
-      <p className="text-xs uppercase tracking-[0.18em] text-secondary">{label}</p>
-      <p className="mt-1 break-words text-sm font-semibold text-primary">{value}</p>
-    </div>
-  )
-}
+function sectorColor(changePct: number) {
+  if (changePct > 2) {
+    return '#14532d'
+  }
 
-function MiniReadCard({
-  label,
-  value,
-  detail,
-  tone = 'neutral',
-}: {
-  label: string
-  value: string
-  detail: string
-  tone?: 'gain' | 'loss' | 'neutral'
-}) {
-  return (
-    <div className="rounded-3xl border border-border bg-base p-4">
-      <p className="text-xs uppercase tracking-[0.18em] text-secondary">{label}</p>
-      <p
-        className={cn(
-          'mt-2 text-lg font-semibold leading-tight text-primary',
-          tone === 'gain' ? 'text-gain' : tone === 'loss' ? 'text-loss' : '',
-        )}
-      >
-        {value}
-      </p>
-      <p className="mt-1 text-sm text-secondary">{detail}</p>
-    </div>
-  )
-}
+  if (changePct > 1) {
+    return '#166534'
+  }
 
-function SummaryBadge({
-  label,
-  value,
-  detail,
-  tone = 'neutral',
-}: {
-  label: string
-  value: string
-  detail: string
-  tone?: 'gain' | 'loss' | 'neutral'
-}) {
-  return (
-    <div className="rounded-3xl border border-border bg-base px-4 py-3">
-      <p className="text-xs uppercase tracking-[0.18em] text-secondary">{label}</p>
-      <p
-        className={cn(
-          'mt-2 break-words text-sm font-semibold text-primary',
-          tone === 'gain' ? 'text-gain' : tone === 'loss' ? 'text-loss' : '',
-        )}
-      >
-        {value}
-      </p>
-      <p className="mt-1 text-xs text-secondary">{detail}</p>
-    </div>
-  )
+  if (changePct > 0) {
+    return '#1a4d25'
+  }
+
+  if (changePct > -1) {
+    return '#7f1d1d'
+  }
+
+  if (changePct > -2) {
+    return '#991b1b'
+  }
+
+  return '#450a0a'
 }

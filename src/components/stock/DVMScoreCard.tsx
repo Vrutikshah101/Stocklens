@@ -50,12 +50,12 @@ export function DVMScoreCard({
   return (
     <section
       className={cn(
-        'rounded-3xl border p-5 shadow-panel',
+        'rounded-lg border p-4',
         tone.panel,
       )}
     >
-      <div className="flex items-start justify-between gap-4">
-        <div>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
           <p className="text-xs uppercase tracking-[0.24em] text-secondary">
             DVM framework
           </p>
@@ -69,13 +69,13 @@ export function DVMScoreCard({
           </p>
         </div>
         <div
-          className="relative h-28 w-28 shrink-0 rounded-full"
+          className="relative h-24 w-24 shrink-0 rounded-full"
           style={{
             background: `conic-gradient(${tone.ring} ${dvm.composite * 3.6}deg, color-mix(in srgb, var(--color-bg-elevated) 95%, transparent) 0deg)`,
           }}
         >
           <div className="absolute inset-3 flex flex-col items-center justify-center rounded-full bg-surface text-center">
-            <span className="text-3xl font-semibold text-primary">
+            <span className="font-mono text-2xl font-semibold text-primary">
               {dvm.composite}
             </span>
             <span className="text-[11px] uppercase tracking-[0.22em] text-secondary">
@@ -106,13 +106,13 @@ export function DVMScoreCard({
       </div>
 
       <div className="mt-5 grid gap-3 sm:grid-cols-3">
-        <div className="rounded-2xl border border-border bg-surface/90 p-4">
+        <div className="rounded-md border border-border bg-surface p-3">
           <p className="text-xs uppercase tracking-[0.22em] text-secondary">
             Label
           </p>
           <p className="mt-2 text-sm font-medium text-primary">{dvm.label}</p>
         </div>
-        <div className="rounded-2xl border border-border bg-surface/90 p-4">
+        <div className="rounded-md border border-border bg-surface p-3">
           <p className="text-xs uppercase tracking-[0.22em] text-secondary">
             Fair value gap
           </p>
@@ -120,7 +120,7 @@ export function DVMScoreCard({
             {formatPct(fairValueGap)} vs {formatCurrency(fairValue)}
           </p>
         </div>
-        <div className="rounded-2xl border border-border bg-surface/90 p-4">
+        <div className="rounded-md border border-border bg-surface p-3">
           <p className="text-xs uppercase tracking-[0.22em] text-secondary">
             Overlay
           </p>

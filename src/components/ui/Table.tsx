@@ -9,7 +9,7 @@ export const Table = forwardRef<HTMLTableElement, TableHTMLAttributes<HTMLTableE
   ref,
 ) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-border">
+    <div className="overflow-hidden rounded-lg border border-border">
       <div className="overflow-x-auto">
         <table ref={ref} className={cn('min-w-full border-collapse text-left text-sm', className)} {...props} />
       </div>

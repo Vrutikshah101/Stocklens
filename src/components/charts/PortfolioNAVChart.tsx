@@ -44,10 +44,10 @@ export function PortfolioNAVChart({
 
   if (!hasHistory) {
     return (
-      <div className={cn('rounded-3xl border border-border bg-surface p-5 shadow-panel', className)}>
+      <div className={cn('rounded-lg border border-border bg-surface p-4', className)}>
         <p className="text-xs uppercase tracking-[0.2em] text-secondary">Portfolio NAV</p>
         <h3 className="mt-1 text-xl font-semibold text-primary">{portfolioName ?? 'Core portfolio'}</h3>
-        <div className="mt-5 rounded-3xl border border-dashed border-border bg-base px-4 py-12 text-center text-sm text-secondary">
+        <div className="mt-4 rounded-lg border border-dashed border-border bg-base px-4 py-12 text-center text-sm text-secondary">
           Add holdings to see the NAV curve here.
         </div>
       </div>
@@ -61,7 +61,7 @@ export function PortfolioNAVChart({
       : 0
 
   return (
-    <div className={cn('rounded-3xl border border-border bg-surface p-5 shadow-panel', className)}>
+    <div className={cn('rounded-lg border border-border bg-surface p-4', className)}>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.2em] text-secondary">Portfolio NAV</p>
@@ -69,14 +69,14 @@ export function PortfolioNAVChart({
           <p className="mt-2 text-sm text-secondary">Live demo curve based on the current holdings basket.</p>
         </div>
 
-        <div className="inline-flex rounded-full border border-border bg-base p-1">
+        <div className="inline-flex rounded-md border border-border bg-base p-1">
           {(['1W', '1M', 'ALL'] as const).map((item) => (
             <button
               key={item}
               type="button"
               onClick={() => setRange(item)}
               className={cn(
-                'rounded-full px-3 py-2 text-sm font-medium transition',
+                'rounded-md px-3 py-1.5 text-sm font-medium transition',
                 range === item ? 'bg-elevated text-primary' : 'text-secondary hover:text-primary',
               )}
             >
@@ -86,7 +86,7 @@ export function PortfolioNAVChart({
         </div>
       </div>
 
-      <div className="mt-5 rounded-3xl border border-border bg-base p-4">
+      <div className="mt-4 rounded-lg border border-border bg-base p-3">
         <svg viewBox="0 0 720 290" className="h-[290px] w-full">
           <defs>
             <linearGradient id="nav-fill" x1="0%" x2="0%" y1="0%" y2="100%">
@@ -157,7 +157,7 @@ export function PortfolioNAVChart({
         </div>
 
         {activePoint ? (
-          <div className="mt-4 rounded-3xl border border-border bg-surface p-4">
+          <div className="mt-4 rounded-lg border border-border bg-surface p-3">
             <p className="text-xs uppercase tracking-[0.18em] text-secondary">Hovered checkpoint</p>
             <div className="mt-2 flex items-end justify-between gap-4">
               <p className="text-sm text-secondary">{new Date(activePoint.date).toLocaleDateString('en-IN')}</p>
@@ -182,7 +182,7 @@ function SnapshotCard({
   tone?: 'gain' | 'loss' | 'neutral'
 }) {
   return (
-    <div className="rounded-3xl border border-border bg-surface p-4">
+    <div className="rounded-lg border border-border bg-surface p-3">
       <p className="text-xs uppercase tracking-[0.18em] text-secondary">{label}</p>
       <p
         className={cn(

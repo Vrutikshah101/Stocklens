@@ -38,10 +38,10 @@ export function FinancialLineChart({ financials, ticker, className }: FinancialL
 
   if (!hasFinancials) {
     return (
-      <div className={cn('rounded-3xl border border-border bg-surface p-5 shadow-panel', className)}>
+      <div className={cn('rounded-lg border border-border bg-surface p-4', className)}>
         <p className="text-xs uppercase tracking-[0.2em] text-secondary">Financials</p>
         <h3 className="mt-1 text-xl font-semibold text-primary">{ticker ? `${ticker} multi-year trend` : 'Multi-year trend'}</h3>
-        <div className="mt-5 rounded-3xl border border-dashed border-border bg-base px-4 py-12 text-center text-sm text-secondary">
+        <div className="mt-4 rounded-lg border border-dashed border-border bg-base px-4 py-12 text-center text-sm text-secondary">
           No financial history is available for this view.
         </div>
       </div>
@@ -53,7 +53,7 @@ export function FinancialLineChart({ financials, ticker, className }: FinancialL
   const trendDelta = series.length > 1 ? ((series.at(-1) ?? 0) - series[0]) / Math.max(Math.abs(series[0]), 1) : 0
 
   return (
-    <div className={cn('rounded-3xl border border-border bg-surface p-5 shadow-panel', className)}>
+    <div className={cn('rounded-lg border border-border bg-surface p-4', className)}>
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
@@ -70,7 +70,7 @@ export function FinancialLineChart({ financials, ticker, className }: FinancialL
                 type="button"
                 onClick={() => setMetric(item.key)}
                 className={cn(
-                  'rounded-full border px-3 py-2 text-sm font-medium transition',
+                  'rounded-md border px-3 py-1.5 text-sm font-medium transition',
                   metric === item.key ? 'border-accent bg-elevated text-primary' : 'border-border bg-base text-secondary hover:text-primary',
                 )}
               >
@@ -80,7 +80,7 @@ export function FinancialLineChart({ financials, ticker, className }: FinancialL
           </div>
         </div>
 
-        <div className="rounded-3xl border border-border bg-base p-4">
+        <div className="rounded-lg border border-border bg-base p-3">
           <svg viewBox="0 0 720 300" className="h-[300px] w-full">
             <defs>
               <linearGradient id="financial-area" x1="0%" x2="0%" y1="0%" y2="100%">
@@ -171,7 +171,7 @@ function MetricCard({
   tone?: 'gain' | 'loss' | 'neutral'
 }) {
   return (
-    <div className="rounded-3xl border border-border bg-surface p-4">
+    <div className="rounded-lg border border-border bg-surface p-3">
       <p className="text-xs uppercase tracking-[0.18em] text-secondary">{label}</p>
       <p
         className={cn(

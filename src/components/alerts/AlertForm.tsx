@@ -23,8 +23,8 @@ export function AlertForm({ onCreate }: AlertFormProps) {
   const [channel, setChannel] = useState<'Web' | 'Email'>('Web')
 
   return (
-    <section className="rounded-3xl border border-border bg-surface/90 p-5 shadow-panel">
-      <h3 className="text-lg font-semibold text-primary">Create Alert</h3>
+    <section className="rounded-lg border border-border bg-surface p-4">
+      <h3 className="text-base font-semibold text-primary">Create Alert</h3>
       <p className="mt-1 text-sm text-secondary">Wire price, DVM, and event thresholds in one place.</p>
 
       <form
@@ -38,7 +38,7 @@ export function AlertForm({ onCreate }: AlertFormProps) {
         <label className="space-y-2 text-xs text-secondary">
           Ticker
           <input
-            className="h-11 w-full rounded-2xl border border-border bg-base px-4 text-sm text-primary outline-none focus:border-accent"
+            className="h-9 w-full rounded-md border border-border bg-base px-3 text-sm text-primary outline-none focus:border-accent"
             onChange={(event) => setTicker(event.target.value.toUpperCase())}
             value={ticker}
           />
@@ -47,7 +47,7 @@ export function AlertForm({ onCreate }: AlertFormProps) {
         <label className="space-y-2 text-xs text-secondary">
           Title
           <input
-            className="h-11 w-full rounded-2xl border border-border bg-base px-4 text-sm text-primary outline-none focus:border-accent"
+            className="h-9 w-full rounded-md border border-border bg-base px-3 text-sm text-primary outline-none focus:border-accent"
             onChange={(event) => setTitle(event.target.value)}
             value={title}
           />
@@ -56,7 +56,7 @@ export function AlertForm({ onCreate }: AlertFormProps) {
         <label className="space-y-2 text-xs text-secondary">
           Metric
           <select
-            className="h-11 w-full rounded-2xl border border-border bg-base px-4 text-sm text-primary outline-none focus:border-accent"
+            className="h-9 w-full rounded-md border border-border bg-base px-3 text-sm text-primary outline-none focus:border-accent"
             onChange={(event) => setMetric(event.target.value as AlertMetric)}
             value={metric}
           >
@@ -72,7 +72,7 @@ export function AlertForm({ onCreate }: AlertFormProps) {
         <label className="space-y-2 text-xs text-secondary">
           Threshold
           <input
-            className="h-11 w-full rounded-2xl border border-border bg-base px-4 text-sm text-primary outline-none focus:border-accent"
+            className="h-9 w-full rounded-md border border-border bg-base px-3 text-sm text-primary outline-none focus:border-accent"
             onChange={(event) => setThreshold(Number(event.target.value))}
             type="number"
             value={threshold}
@@ -82,7 +82,7 @@ export function AlertForm({ onCreate }: AlertFormProps) {
         <label className="space-y-2 text-xs text-secondary md:col-span-2">
           Channel
           <select
-            className="h-11 w-full rounded-2xl border border-border bg-base px-4 text-sm text-primary outline-none focus:border-accent"
+            className="h-9 w-full rounded-md border border-border bg-base px-3 text-sm text-primary outline-none focus:border-accent"
             onChange={(event) => setChannel(event.target.value as 'Web' | 'Email')}
             value={channel}
           >
@@ -92,7 +92,7 @@ export function AlertForm({ onCreate }: AlertFormProps) {
         </label>
 
         <button
-          className="inline-flex h-11 items-center justify-center rounded-2xl bg-accent px-4 text-sm font-medium text-white transition hover:brightness-110 md:col-span-2"
+          className="inline-flex h-9 items-center justify-center rounded-md bg-accent px-4 text-sm font-medium text-white transition hover:brightness-110 md:col-span-2"
           type="submit"
         >
           Save Alert
@@ -101,4 +101,3 @@ export function AlertForm({ onCreate }: AlertFormProps) {
     </section>
   )
 }
-

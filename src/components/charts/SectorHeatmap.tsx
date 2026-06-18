@@ -32,8 +32,8 @@ export function SectorHeatmap({
               type="button"
               onClick={() => onSelectSector?.(cell.sector)}
               className={cn(
-                'group rounded-3xl border p-4 text-left transition duration-150 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-accent',
-                isActive ? 'shadow-panel' : '',
+                'group rounded-lg border p-4 text-left transition duration-150 hover:border-accent focus:outline-none focus:ring-2 focus:ring-accent',
+                isActive ? 'ring-2 ring-accent/40' : '',
               )}
               style={{
                 borderColor: isActive
@@ -57,7 +57,7 @@ export function SectorHeatmap({
                 {cell.leaders.map((leader) => (
                   <span
                     key={leader}
-                    className="rounded-full border border-border bg-base px-2 py-1 text-[11px] font-medium text-secondary"
+                    className="rounded-md border border-border bg-base px-2 py-1 text-[11px] font-medium text-secondary"
                   >
                     {leader}
                   </span>
@@ -94,8 +94,8 @@ export function SectorHeatmap({
               type="button"
               onClick={() => onSelectSector?.(cell.sector)}
               className={cn(
-                'group rounded-3xl border p-4 text-left transition duration-150 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-accent',
-                isActive ? 'shadow-panel' : '',
+                'group rounded-lg border p-4 text-left transition duration-150 hover:border-accent focus:outline-none focus:ring-2 focus:ring-accent',
+                isActive ? 'ring-2 ring-accent/40' : '',
               )}
               style={{
                 gridColumn: `span ${span.col} / span ${span.col}`,
@@ -123,7 +123,7 @@ export function SectorHeatmap({
                     {cell.leaders.map((leader) => (
                       <span
                         key={leader}
-                        className="rounded-full border border-border bg-base px-2 py-1 text-[11px] font-medium text-secondary"
+                        className="rounded-md border border-border bg-base px-2 py-1 text-[11px] font-medium text-secondary"
                       >
                         {leader}
                       </span>

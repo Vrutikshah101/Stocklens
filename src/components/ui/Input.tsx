@@ -21,7 +21,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       {label ? <span className="font-medium text-primary">{label}</span> : null}
       <span
         className={cn(
-          'field-surface flex h-12 items-center gap-3 rounded-2xl px-4 transition-all duration-200 focus-within:border-[var(--color-accent-blue)] focus-within:ring-2 focus-within:ring-[rgba(124,156,255,0.18)]',
+          'field-surface flex h-9 items-center gap-2 rounded-md px-3 transition-all duration-150 focus-within:border-[var(--color-accent-blue)] focus-within:ring-2 focus-within:ring-[rgba(47,129,247,0.18)]',
           error && 'border-[rgba(255,139,139,0.42)] focus-within:border-[var(--color-red)] focus-within:ring-[rgba(255,139,139,0.18)]',
         )}
       >

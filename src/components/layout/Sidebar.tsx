@@ -69,23 +69,23 @@ export function Sidebar({ user }: SidebarProps) {
       />
       <aside
         className={cn(
-          'panel-elevated fixed inset-y-3 left-3 z-50 flex w-[18rem] flex-col overflow-hidden rounded-[30px] transition-all duration-300',
+          'fixed inset-y-0 left-0 z-50 flex w-[15rem] flex-col overflow-hidden border-r border-[#30363d] bg-[#161b22] transition-all duration-300',
           sidebarOpen ? 'translate-x-0' : '-translate-x-[calc(100%+1rem)] lg:translate-x-0',
-          expanded ? 'lg:w-[18rem]' : 'lg:w-[5.25rem]',
+          expanded ? 'lg:w-[15rem]' : 'lg:w-[4.75rem]',
         )}
       >
-        <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-4">
+        <div className="flex items-center justify-between gap-3 border-b border-[#30363d] px-4 py-4">
           <div className={cn('flex items-center gap-3', !expanded && 'lg:justify-center')}>
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,rgba(124,156,255,0.95),rgba(119,216,219,0.72))] text-base font-semibold text-slate-950">
+            <div className="flex h-7 w-7 items-center justify-center rounded-md bg-[linear-gradient(135deg,#2f81f7,#8b5cf6)] text-xs font-bold text-white">
               SL
             </div>
             <div className={cn('min-w-0', !expanded && 'lg:hidden')}>
-              <p className="text-sm font-semibold text-primary">StockLens</p>
-              <p className="text-xs text-muted">Calm analytics shell</p>
+              <p className="text-sm font-bold text-[#e6edf3]">StockLens</p>
+              <p className="text-[10px] text-[#8b949e]">NSE · BSE Analytics</p>
             </div>
           </div>
           <button
-            className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-border bg-[var(--color-surface-soft)] text-secondary transition hover:text-primary lg:hidden"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-[#30363d] bg-[#21262d] text-[#8b949e] transition hover:text-[#e6edf3] lg:hidden"
             onClick={() => setSidebarOpen(false)}
             type="button"
           >
@@ -93,7 +93,7 @@ export function Sidebar({ user }: SidebarProps) {
           </button>
         </div>
 
-        <div className="flex flex-1 flex-col gap-5 overflow-y-auto px-3 py-4">
+        <div className="flex flex-1 flex-col gap-4 overflow-y-auto px-2 py-3">
           <nav className="space-y-1.5">
             {NAV_ITEMS.map((item) => {
               const Icon = navIcons[item.label as keyof typeof navIcons]
@@ -101,10 +101,10 @@ export function Sidebar({ user }: SidebarProps) {
               const link = (
                 <Link
                   className={cn(
-                    'group flex h-12 items-center gap-3 rounded-2xl px-3 text-sm transition-all duration-200',
+                    'group flex h-9 items-center gap-2.5 rounded-md px-2.5 text-[13px] font-medium transition-all duration-200',
                     active
-                      ? 'bg-[var(--color-accent-blue-soft)] text-primary shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]'
-                      : 'text-secondary hover:bg-[var(--color-surface-soft)] hover:text-primary',
+                      ? 'bg-[#1f3a5f] text-[#2f81f7]'
+                      : 'text-[#8b949e] hover:bg-[#21262d] hover:text-[#e6edf3]',
                     !expanded && 'lg:justify-center lg:px-0',
                   )}
                   href={item.href}
@@ -112,10 +112,10 @@ export function Sidebar({ user }: SidebarProps) {
                 >
                   <span
                     className={cn(
-                      'flex h-9 w-9 items-center justify-center rounded-2xl transition-colors',
+                      'flex h-9 w-9 items-center justify-center rounded-md transition-colors',
                       active
-                        ? 'bg-[rgba(124,156,255,0.18)] text-[var(--color-accent-blue)]'
-                        : 'bg-transparent text-muted group-hover:text-primary',
+                        ? 'text-[#2f81f7]'
+                        : 'bg-transparent text-[#8b949e] group-hover:text-[#e6edf3]',
                     )}
                   >
                     {Icon ? <Icon className="h-4 w-4" /> : null}
@@ -137,19 +137,19 @@ export function Sidebar({ user }: SidebarProps) {
           </nav>
 
           <div className={cn('space-y-3', !expanded && 'lg:hidden')}>
-            <div className="rounded-[24px] border border-border bg-[var(--color-surface-soft)] p-4">
+            <div className="rounded-lg border border-[#30363d] bg-[#21262d] p-3">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-sm font-semibold text-primary">Market pulse</p>
-                  <p className="mt-1 text-xs leading-5 text-muted">Indian timing is respected and updates every minute.</p>
+                  <p className="text-sm font-semibold text-[#e6edf3]">Market pulse</p>
+                  <p className="mt-1 text-xs leading-5 text-[#8b949e]">Indian timing updates every minute.</p>
                 </div>
                 <Badge dot variant={marketStatus.isOpen ? 'success' : 'warning'}>
                   {marketStatus.label}
                 </Badge>
               </div>
-              <p className="mt-3 text-sm leading-6 text-secondary">{marketStatus.hint}</p>
+              <p className="mt-3 text-xs leading-5 text-[#8b949e]">{marketStatus.hint}</p>
               <button
-                className="mt-4 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.18em] text-muted transition hover:text-primary"
+                className="mt-3 inline-flex items-center gap-2 text-[10px] font-semibold uppercase text-[#8b949e] transition hover:text-[#e6edf3]"
                 onClick={toggleMarketMind}
                 type="button"
               >
@@ -157,7 +157,7 @@ export function Sidebar({ user }: SidebarProps) {
                 {marketMindOpen ? 'Hide trust notes' : 'Show trust notes'}
               </button>
               {marketMindOpen ? (
-                <ul className="mt-4 space-y-2 text-sm text-secondary">
+                <ul className="mt-3 space-y-2 text-xs text-[#8b949e]">
                   <li>Simulated NSE and BSE-style data keeps flows realistic.</li>
                   <li>Theme choice persists locally for continuity between sessions.</li>
                   <li>Search and nav remain one click away on every screen.</li>
@@ -167,20 +167,20 @@ export function Sidebar({ user }: SidebarProps) {
           </div>
         </div>
 
-        <div className={cn('border-t border-border px-3 py-4', !expanded && 'lg:px-2')}>
+        <div className={cn('border-t border-[#30363d] px-2 py-3', !expanded && 'lg:px-2')}>
           <div
             className={cn(
-              'rounded-[24px] border border-border bg-[var(--color-surface-soft)] p-3',
+              'rounded-lg border border-[#30363d] bg-[#21262d] p-2.5',
               !expanded && 'lg:flex lg:justify-center lg:p-2',
             )}
           >
             <div className={cn('flex items-center gap-3', !expanded && 'lg:flex-col')}>
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[rgba(124,156,255,0.14)] text-sm font-semibold text-[var(--color-accent-blue)]">
+              <div className="flex h-8 w-8 items-center justify-center rounded-md bg-[#30363d] text-xs font-bold text-[#2f81f7]">
                 {user?.avatarInitials ?? 'SL'}
               </div>
               <div className={cn('min-w-0 flex-1', !expanded && 'lg:hidden')}>
-                <p className="truncate text-sm font-medium text-primary">{user?.name ?? 'Guest mode'}</p>
-                <p className="truncate text-xs text-muted">{user?.email ?? 'Local demo state'}</p>
+                <p className="truncate text-xs font-medium text-[#e6edf3]">{user?.name ?? 'Guest mode'}</p>
+                <p className="truncate text-[10px] text-[#8b949e]">{user?.email ?? 'Local demo state'}</p>
               </div>
               {expanded ? (
                 <Badge size="sm" variant="outline">
@@ -190,7 +190,7 @@ export function Sidebar({ user }: SidebarProps) {
             </div>
           </div>
           <button
-            className="mt-3 hidden h-10 w-full items-center justify-center gap-2 rounded-2xl border border-border bg-[var(--color-surface-soft)] text-sm font-medium text-secondary transition hover:text-primary lg:inline-flex"
+            className="mt-3 hidden h-9 w-full items-center justify-center gap-2 rounded-md border border-[#30363d] bg-[#21262d] text-xs font-medium text-[#8b949e] transition hover:text-[#e6edf3] lg:inline-flex"
             onClick={toggleSidebar}
             type="button"
           >

@@ -38,24 +38,15 @@ function readStoredUser() {
 
 export function Providers({ children }: { children: ReactNode }) {
   const pathname = usePathname()
-  const { setSidebarOpen, sidebarOpen, theme, toggleTheme } = useUIStore()
+  const { setSidebarOpen, sidebarOpen, theme } = useUIStore()
   const [user, setUser] = useState<UserProfile | null>(null)
   const [shellReady, setShellReady] = useState(false)
   const initialTheme = useRef(theme)
 
   useEffect(() => {
-    const savedTheme = window.localStorage.getItem(THEME_KEY)
-    if (savedTheme === 'light' || savedTheme === 'dark') {
-      document.documentElement.dataset.theme = savedTheme
-      document.documentElement.style.colorScheme = savedTheme
-
-      if (savedTheme !== initialTheme.current) {
-        toggleTheme()
-      }
-    } else {
-      document.documentElement.dataset.theme = initialTheme.current
-      document.documentElement.style.colorScheme = initialTheme.current
-    }
+    document.documentElement.dataset.theme = initialTheme.current
+    document.documentElement.style.colorScheme = initialTheme.current
+    window.localStorage.setItem(THEME_KEY, initialTheme.current)
 
     if (window.innerWidth < 1024) {
       setSidebarOpen(false)
@@ -63,7 +54,7 @@ export function Providers({ children }: { children: ReactNode }) {
 
     setUser(readStoredUser())
     setShellReady(true)
-  }, [setSidebarOpen, toggleTheme])
+  }, [setSidebarOpen])
 
   useEffect(() => {
     if (!shellReady) {
@@ -94,7 +85,7 @@ export function Providers({ children }: { children: ReactNode }) {
   }, [pathname, setSidebarOpen])
 
   const mainWidthClass = useMemo(
-    () => (sidebarOpen ? 'lg:pl-[19rem]' : 'lg:pl-[6.5rem]'),
+    () => (sidebarOpen ? 'lg:pl-[15rem]' : 'lg:pl-[4.75rem]'),
     [sidebarOpen],
   )
 
@@ -105,7 +96,7 @@ export function Providers({ children }: { children: ReactNode }) {
       <Sidebar user={user} />
       <TopBar user={user} />
       <div className={cn('relative flex min-h-screen flex-col transition-[padding] duration-300', mainWidthClass)}>
-        <main className="flex-1 px-4 pb-24 pt-24 md:px-6 lg:px-8 lg:pb-10 lg:pt-28">
+        <main className="flex-1 bg-[#0d1117] px-4 pb-24 pt-20 md:px-5 lg:px-6 lg:pb-8 lg:pt-20">
           <div className={cn('mx-auto w-full', contentWidthClass)}>{children}</div>
         </main>
         <BottomNav />

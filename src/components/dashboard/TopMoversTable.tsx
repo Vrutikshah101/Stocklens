@@ -42,14 +42,14 @@ export function TopMoversTable({
   }, [movers, view])
 
   return (
-    <section className={cn('min-w-0 overflow-hidden rounded-3xl border border-border bg-surface p-5 shadow-panel', className)}>
+    <section className={cn('min-w-0 overflow-hidden rounded-lg border border-border bg-surface p-4 sm:p-5', className)}>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-xs uppercase tracking-[0.2em] text-secondary">Top Movers</p>
+          <p className="text-xs font-medium uppercase text-secondary">Top movers</p>
           <h3 className="mt-1 text-xl font-semibold text-primary">Gainers, laggards, and volume leaders</h3>
         </div>
 
-        <div className="inline-flex w-full rounded-full border border-border bg-base p-1 sm:w-auto">
+        <div className="inline-flex w-full rounded-lg border border-border bg-base p-1 sm:w-auto">
           {([
             ['gainers', 'Gainers'],
             ['losers', 'Losers'],
@@ -60,7 +60,7 @@ export function TopMoversTable({
               type="button"
               onClick={() => setView(value)}
               className={cn(
-                'flex-1 rounded-full px-3 py-2 text-sm font-medium transition sm:flex-none',
+                'flex-1 rounded-md px-3 py-2 text-sm font-medium transition sm:flex-none',
                 view === value ? 'bg-elevated text-primary' : 'text-secondary hover:text-primary',
               )}
             >
@@ -81,7 +81,7 @@ export function TopMoversTable({
               type="button"
               onClick={() => onSelectTicker?.(row.ticker)}
               className={cn(
-                'rounded-3xl border p-4 text-left transition',
+                'rounded-lg border p-4 text-left transition',
                 isActive ? 'border-accent bg-elevated' : 'border-border bg-base hover:border-accent',
               )}
             >
@@ -92,7 +92,7 @@ export function TopMoversTable({
                 </div>
                 <span
                   className={cn(
-                    'rounded-full px-2.5 py-1 text-xs font-medium',
+                    'rounded-md px-2.5 py-1 text-xs font-medium',
                     row.dvm >= 70 ? 'text-gain' : row.dvm >= 55 ? 'text-warn' : 'text-loss',
                   )}
                   style={{
@@ -132,7 +132,7 @@ export function TopMoversTable({
         })}
       </div>
 
-      <div className="mt-5 hidden overflow-x-auto rounded-3xl border border-border md:block">
+      <div className="mt-5 hidden overflow-x-auto rounded-lg border border-border md:block">
         <table className="min-w-[560px] divide-y divide-border text-left text-sm">
           <thead className="bg-base text-secondary">
             <tr>
@@ -160,7 +160,7 @@ export function TopMoversTable({
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
                       <div
-                        className="flex h-10 w-10 items-center justify-center rounded-2xl border border-border bg-base text-xs font-semibold text-primary"
+                        className="flex h-10 w-10 items-center justify-center rounded-md border border-border bg-base text-xs font-semibold text-primary"
                         aria-hidden="true"
                       >
                         {row.ticker.slice(0, 3)}
@@ -187,7 +187,7 @@ export function TopMoversTable({
                   <td className="px-4 py-3">
                     <span
                       className={cn(
-                        'rounded-full px-2.5 py-1 text-xs font-medium',
+                        'rounded-md px-2.5 py-1 text-xs font-medium',
                         row.dvm >= 70 ? 'text-gain' : row.dvm >= 55 ? 'text-warn' : 'text-loss',
                       )}
                       style={{
@@ -218,8 +218,8 @@ export function TopMoversTable({
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-border bg-surface px-3 py-3">
-      <p className="text-[11px] uppercase tracking-[0.16em] text-secondary">{label}</p>
+    <div className="rounded-lg border border-border bg-surface px-3 py-3">
+      <p className="text-[11px] font-medium uppercase text-secondary">{label}</p>
       <p className="mt-1 text-sm font-semibold text-primary">{value}</p>
     </div>
   )

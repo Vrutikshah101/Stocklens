@@ -19,15 +19,15 @@ export function PortfolioNAVChart({ points }: PortfolioNAVChartProps) {
     .join(' ')
 
   return (
-    <section className="rounded-3xl border border-border bg-surface/90 p-5 shadow-panel">
+    <section className="rounded-lg border border-border bg-surface p-4">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-primary">NAV Trend</h3>
+          <h3 className="text-base font-semibold text-primary">NAV Trend</h3>
           <p className="mt-1 text-sm text-secondary">A simple trailing 30-session equity curve.</p>
         </div>
       </div>
 
-      <div className="mt-5 rounded-2xl border border-border bg-base/70 p-4">
+      <div className="mt-4 rounded-md border border-border bg-base/70 p-3">
         <svg className="h-56 w-full" preserveAspectRatio="none" viewBox="0 0 100 100">
           <defs>
             <linearGradient id="navFill" x1="0" x2="0" y1="0" y2="1">
@@ -42,4 +42,3 @@ export function PortfolioNAVChart({ points }: PortfolioNAVChartProps) {
     </section>
   )
 }
-

@@ -8,7 +8,7 @@ export const Card = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(f
   { className, ...props },
   ref,
 ) {
-  return <div ref={ref} className={cn('panel-elevated rounded-[28px] p-5 md:p-6', className)} {...props} />
+  return <div ref={ref} className={cn('panel-elevated rounded-lg p-4', className)} {...props} />
 })
 
 export const CardHeader = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(function CardHeader(
@@ -22,12 +22,12 @@ export const CardTitle = forwardRef<HTMLHeadingElement, HTMLAttributes<HTMLHeadi
   { className, ...props },
   ref,
 ) {
-  return <h2 ref={ref} className={cn('text-lg font-semibold tracking-tight text-primary', className)} {...props} />
+  return <h2 ref={ref} className={cn('text-base font-semibold tracking-tight text-primary', className)} {...props} />
 })
 
 export const CardDescription = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLParagraphElement>>(
   function CardDescription({ className, ...props }, ref) {
-    return <p ref={ref} className={cn('text-sm leading-6 text-secondary', className)} {...props} />
+    return <p ref={ref} className={cn('text-sm leading-5 text-secondary', className)} {...props} />
   },
 )
 
@@ -35,14 +35,14 @@ export const CardContent = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElem
   { className, ...props },
   ref,
 ) {
-  return <div ref={ref} className={cn('mt-5', className)} {...props} />
+  return <div ref={ref} className={cn('mt-4', className)} {...props} />
 })
 
 export const CardFooter = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(function CardFooter(
   { className, ...props },
   ref,
 ) {
-  return <div ref={ref} className={cn('mt-5 flex items-center justify-between gap-3', className)} {...props} />
+  return <div ref={ref} className={cn('mt-4 flex items-center justify-between gap-3', className)} {...props} />
 })
 
 export default Card

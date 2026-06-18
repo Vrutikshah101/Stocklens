@@ -78,7 +78,7 @@ export function Dialog({
       <div
         aria-modal="true"
         className={cn(
-          'panel-elevated relative z-10 w-full rounded-[30px] p-5 md:p-6',
+          'panel-elevated relative z-10 w-full rounded-lg p-4 md:p-5',
           sizeClasses[size],
           className,
         )}
@@ -91,7 +91,7 @@ export function Dialog({
           </div>
           <button
             aria-label="Close dialog"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-border bg-[var(--color-surface-soft)] text-secondary transition hover:text-primary"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-border bg-[var(--color-bg-elevated)] text-secondary transition hover:text-primary"
             onClick={() => onOpenChange(false)}
             type="button"
           >

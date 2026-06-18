@@ -31,7 +31,7 @@ export function BottomNav() {
 
   return (
     <nav className="fixed inset-x-0 bottom-3 z-30 px-3 lg:hidden">
-      <div className="panel-elevated mx-auto flex max-w-md items-center justify-between rounded-[28px] px-2 py-2">
+      <div className="panel-elevated mx-auto flex max-w-md items-center justify-between rounded-lg px-2 py-2">
         {items.map((item) => {
           const Icon = item.icon
           const active = pathname ? isActive(item.href, pathname) : false
@@ -39,7 +39,7 @@ export function BottomNav() {
           return (
             <Link
               className={cn(
-                'flex min-w-[4.2rem] flex-1 flex-col items-center gap-1 rounded-2xl px-2 py-2 text-[11px] font-medium transition-all',
+                'flex min-w-[4.2rem] flex-1 flex-col items-center gap-1 rounded-md px-2 py-2 text-[11px] font-medium transition-all',
                 active
                   ? 'bg-[var(--color-accent-blue-soft)] text-primary'
                   : 'text-muted hover:bg-[var(--color-surface-soft)] hover:text-primary',

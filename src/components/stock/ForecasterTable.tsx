@@ -37,7 +37,7 @@ export function ForecasterTable({ forecasts }: ForecasterTableProps) {
   )
 
   return (
-    <section className="rounded-3xl border border-border bg-surface p-5 shadow-panel">
+    <section className="min-w-0 rounded-lg border border-border bg-surface p-4">
       <div className="mb-5 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.24em] text-secondary">
@@ -53,7 +53,7 @@ export function ForecasterTable({ forecasts }: ForecasterTableProps) {
           </p>
         </div>
         <div className="grid gap-3 md:grid-cols-2">
-          <article className="rounded-2xl border border-border bg-base p-4">
+          <article className="rounded-md border border-border bg-base p-3">
             <div className="flex items-center gap-2 text-secondary">
               <Users className="h-4 w-4" />
               <span className="text-xs uppercase tracking-[0.2em] text-secondary">
@@ -64,7 +64,7 @@ export function ForecasterTable({ forecasts }: ForecasterTableProps) {
               {totalAnalysts} total analyst datapoints
             </p>
           </article>
-          <article className="rounded-2xl border border-border bg-base p-4">
+          <article className="rounded-md border border-border bg-base p-3">
             <div className="flex items-center gap-2 text-secondary">
               <BrainCircuit className="h-4 w-4" />
               <span className="text-xs uppercase tracking-[0.2em] text-secondary">

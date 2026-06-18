@@ -29,16 +29,16 @@ export function IndexSnapshot({
   className,
 }: IndexSnapshotProps) {
   return (
-    <section className={cn('space-y-4', className)}>
+    <section className={cn('rounded-lg border border-border bg-surface p-4 sm:p-5', className)}>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-xs uppercase tracking-[0.22em] text-secondary">Market Snapshot</p>
+          <p className="text-xs font-medium uppercase text-secondary">Market snapshot</p>
           <h2 className="mt-1 text-xl font-semibold text-primary">Benchmarks, breadth, and momentum</h2>
         </div>
 
         <div
           className={cn(
-            'inline-flex items-center gap-3 rounded-full border px-4 py-2 text-sm',
+            'inline-flex items-center gap-3 rounded-lg border px-3 py-2 text-sm',
             marketStatus.isOpen ? 'border-gain text-primary' : 'border-border text-primary',
           )}
           style={{
@@ -60,7 +60,7 @@ export function IndexSnapshot({
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {indices.map((index) => {
           const isPositive = index.change >= 0
           const isActive = index.symbol === selectedSymbol
@@ -71,18 +71,18 @@ export function IndexSnapshot({
               type="button"
               onClick={() => onSelectSymbol?.(index.symbol)}
               className={cn(
-                'rounded-3xl border p-4 text-left transition duration-150 hover:-translate-y-0.5 hover:border-accent focus:outline-none focus:ring-2 focus:ring-accent',
-                isActive ? 'border-accent bg-elevated shadow-panel' : 'border-border bg-surface',
+                'rounded-lg border p-4 text-left transition duration-150 hover:border-accent focus:outline-none focus:ring-2 focus:ring-accent',
+                isActive ? 'border-accent bg-base' : 'border-border bg-base/60',
               )}
             >
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.18em] text-secondary">{index.symbol}</p>
+                  <p className="text-xs font-medium uppercase text-secondary">{index.symbol}</p>
                   <p className="mt-1 text-sm text-secondary">{index.name}</p>
                 </div>
                 <span
                   className={cn(
-                    'rounded-full px-2.5 py-1 text-xs font-medium',
+                    'rounded-md px-2.5 py-1 text-xs font-medium',
                     isPositive ? 'text-gain' : 'text-loss',
                   )}
                   style={{
@@ -109,7 +109,7 @@ export function IndexSnapshot({
                 </div>
               </div>
 
-              <div className="mt-4 flex items-center justify-between rounded-2xl bg-base px-3 py-2 text-xs">
+              <div className="mt-4 flex items-center justify-between rounded-md border border-border bg-surface px-3 py-2 text-xs">
                 <span className="text-secondary">Breadth</span>
                 <span className="font-medium text-primary">{index.breadth}</span>
               </div>

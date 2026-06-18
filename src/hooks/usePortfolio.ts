@@ -12,6 +12,7 @@ import type {
 } from '@/types/portfolio'
 
 const STORAGE_KEY = 'stocklens-transactions'
+const DEMO_NOW = new Date('2026-06-18T07:00:00.000Z')
 
 export function usePortfolio() {
   const { selectedPortfolioId, setSelectedPortfolioId, pendingTicker, setPendingTicker } = usePortfolioStore()
@@ -108,7 +109,7 @@ export function usePortfolio() {
       }, 0)
 
       return {
-        date: subDays(new Date(), 29 - index).toISOString(),
+        date: subDays(DEMO_NOW, 29 - index).toISOString(),
         value,
       }
     })
@@ -138,4 +139,3 @@ export function usePortfolio() {
 function subDays(date: Date, amount: number) {
   return new Date(date.getTime() - amount * 24 * 60 * 60 * 1000)
 }
-

@@ -36,10 +36,10 @@ export function NewsfeedWidget({
   )
 
   return (
-    <section className={cn('rounded-3xl border border-border bg-surface p-5 shadow-panel', className)}>
+    <section className={cn('rounded-lg border border-border bg-surface p-4 sm:p-5', className)}>
       <div className="flex flex-col gap-4">
         <div>
-          <p className="text-xs uppercase tracking-[0.2em] text-secondary">Personalized Newsfeed</p>
+          <p className="text-xs font-medium uppercase text-secondary">Personalized newsfeed</p>
           <h3 className="mt-1 text-xl font-semibold text-primary">Stories linked to the live dashboard tape</h3>
         </div>
 
@@ -50,7 +50,7 @@ export function NewsfeedWidget({
               type="button"
               onClick={() => setCategory(item)}
               className={cn(
-                'rounded-full border px-3 py-2 text-sm font-medium transition',
+                'rounded-md border px-3 py-2 text-sm font-medium transition',
                 category === item ? 'border-accent bg-elevated text-primary' : 'border-border bg-base text-secondary hover:text-primary',
               )}
             >
@@ -72,14 +72,14 @@ export function NewsfeedWidget({
                 type="button"
                 onClick={() => onSelectTicker?.(item.ticker)}
                 className={cn(
-                  'w-full rounded-3xl border p-4 text-left transition hover:-translate-y-0.5 hover:border-accent focus:outline-none focus:ring-2 focus:ring-accent',
+                  'w-full rounded-lg border p-4 text-left transition hover:border-accent focus:outline-none focus:ring-2 focus:ring-accent',
                   isSelected ? 'border-accent bg-elevated' : 'border-border bg-base',
                 )}
               >
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="rounded-full border border-border px-2 py-1 text-[11px] font-medium text-secondary">
+                      <span className="rounded-md border border-border px-2 py-1 text-[11px] font-medium text-secondary">
                         {item.category}
                       </span>
                       <span className="text-xs text-secondary">{item.company}</span>
@@ -103,7 +103,7 @@ export function NewsfeedWidget({
             )
           })
         ) : (
-          <div className="rounded-3xl border border-dashed border-border bg-base px-4 py-8 text-center text-sm text-secondary">
+          <div className="rounded-lg border border-dashed border-border bg-base px-4 py-8 text-center text-sm text-secondary">
             No stories match this filter right now.
           </div>
         )}

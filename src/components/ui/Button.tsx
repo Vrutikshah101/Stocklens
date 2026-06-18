@@ -19,20 +19,20 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    'bg-[linear-gradient(135deg,rgba(124,156,255,0.92),rgba(98,185,255,0.82))] text-slate-950 shadow-[0_16px_36px_rgba(103,145,255,0.28)] hover:brightness-110',
+    'border border-[#2f81f7] bg-[#1f6feb] text-white hover:bg-[#2f81f7]',
   secondary:
-    'bg-[var(--color-surface-strong)] text-primary shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-[var(--color-bg-elevated)]',
+    'border border-border bg-[var(--color-bg-elevated)] text-primary hover:bg-[#30363d]',
   ghost: 'bg-transparent text-secondary hover:bg-[var(--color-surface-soft)] hover:text-primary',
   outline: 'border border-border bg-transparent text-primary hover:border-[var(--color-border-strong)] hover:bg-[var(--color-surface-soft)]',
   danger:
-    'bg-[linear-gradient(135deg,rgba(255,139,139,0.94),rgba(255,112,112,0.88))] text-slate-950 shadow-[0_16px_36px_rgba(255,112,112,0.22)] hover:brightness-105',
+    'border border-[#f85149] bg-[#da3633] text-white hover:bg-[#f85149]',
 }
 
 const sizeClasses: Record<ButtonSize, string> = {
-  sm: 'h-9 px-3.5 text-sm',
-  md: 'h-11 px-4 text-sm',
-  lg: 'h-12 px-5 text-sm',
-  icon: 'h-11 w-11',
+  sm: 'h-8 px-3 text-xs',
+  md: 'h-9 px-3.5 text-sm',
+  lg: 'h-10 px-4 text-sm',
+  icon: 'h-9 w-9',
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
@@ -54,7 +54,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     <button
       ref={ref}
       className={cn(
-        'inline-flex items-center justify-center gap-2 rounded-2xl font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-blue)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-base)] disabled:pointer-events-none disabled:opacity-60',
+        'inline-flex items-center justify-center gap-2 rounded-md font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-blue)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-base)] disabled:pointer-events-none disabled:opacity-60',
         sizeClasses[size],
         variantClasses[variant],
         className,

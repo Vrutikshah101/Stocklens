@@ -13,11 +13,11 @@ interface FilterBlockProps {
 
 export function FilterBlock({ filter, onChange, onRemove }: FilterBlockProps) {
   return (
-    <div className="grid gap-3 rounded-2xl border border-border bg-base/70 p-4 md:grid-cols-[1.2fr_0.8fr_1fr_1fr_auto]">
+    <div className="grid gap-3 rounded-md border border-border bg-base/70 p-3 md:grid-cols-[1.2fr_0.8fr_1fr_1fr_auto]">
       <label className="space-y-2 text-xs text-secondary">
         Field
         <select
-          className="h-10 w-full rounded-xl border border-border bg-surface px-3 text-sm text-primary outline-none focus:border-accent"
+          className="h-9 w-full rounded-md border border-border bg-surface px-3 text-sm text-primary outline-none focus:border-accent"
           onChange={(event) => onChange(filter.id, { field: event.target.value as ScreenerFilter['field'] })}
           value={filter.field}
         >
@@ -32,7 +32,7 @@ export function FilterBlock({ filter, onChange, onRemove }: FilterBlockProps) {
       <label className="space-y-2 text-xs text-secondary">
         Operator
         <select
-          className="h-10 w-full rounded-xl border border-border bg-surface px-3 text-sm text-primary outline-none focus:border-accent"
+          className="h-9 w-full rounded-md border border-border bg-surface px-3 text-sm text-primary outline-none focus:border-accent"
           onChange={(event) => onChange(filter.id, { operator: event.target.value as ScreenerFilter['operator'] })}
           value={filter.operator}
         >
@@ -45,7 +45,7 @@ export function FilterBlock({ filter, onChange, onRemove }: FilterBlockProps) {
       <label className="space-y-2 text-xs text-secondary">
         Value
         <input
-          className="h-10 w-full rounded-xl border border-border bg-surface px-3 text-sm text-primary outline-none focus:border-accent"
+          className="h-9 w-full rounded-md border border-border bg-surface px-3 text-sm text-primary outline-none focus:border-accent"
           onChange={(event) => onChange(filter.id, { value: Number(event.target.value) })}
           type="number"
           value={filter.value}
@@ -55,7 +55,7 @@ export function FilterBlock({ filter, onChange, onRemove }: FilterBlockProps) {
       <label className="space-y-2 text-xs text-secondary">
         Max
         <input
-          className="h-10 w-full rounded-xl border border-border bg-surface px-3 text-sm text-primary outline-none focus:border-accent"
+          className="h-9 w-full rounded-md border border-border bg-surface px-3 text-sm text-primary outline-none focus:border-accent"
           disabled={filter.operator !== 'between'}
           onChange={(event) => onChange(filter.id, { maxValue: Number(event.target.value) })}
           type="number"
@@ -64,7 +64,7 @@ export function FilterBlock({ filter, onChange, onRemove }: FilterBlockProps) {
       </label>
 
       <button
-        className="inline-flex h-10 items-center justify-center self-end rounded-xl border border-border bg-surface px-3 text-secondary transition hover:border-loss hover:text-loss"
+        className="inline-flex h-9 items-center justify-center self-end rounded-md border border-border bg-surface px-3 text-secondary transition hover:border-loss hover:text-loss"
         onClick={() => onRemove(filter.id)}
         type="button"
       >
@@ -73,4 +73,3 @@ export function FilterBlock({ filter, onChange, onRemove }: FilterBlockProps) {
     </div>
   )
 }
-

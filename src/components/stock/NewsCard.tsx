@@ -9,15 +9,15 @@ interface NewsCardProps {
 
 export function NewsCard({ item }: NewsCardProps) {
   return (
-    <article className="rounded-3xl border border-border bg-base/70 p-4 shadow-panel">
+    <article className="rounded-lg border border-border bg-base/70 p-4">
       <div className="flex items-start justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded-full border border-border px-2.5 py-1 text-xs text-secondary">
+          <span className="rounded-md border border-border px-2.5 py-1 text-xs text-secondary">
             {item.category}
           </span>
           <span className="text-xs text-secondary">{item.source}</span>
         </div>
-        <div className="rounded-2xl border border-border bg-surface p-2.5 text-secondary">
+        <div className="rounded-md border border-border bg-surface p-2.5 text-secondary">
           <Newspaper className="h-4 w-4" />
         </div>
       </div>

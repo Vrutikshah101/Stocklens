@@ -21,6 +21,8 @@ import type { PortfolioTransaction } from '@/types/portfolio'
 import type { ScreenerField, ScreenerFilter, ScreenerResult, ScreenerTemplate } from '@/types/screener'
 import type { UserProfile } from '@/types/user'
 
+const DEMO_NOW = new Date('2026-06-18T07:00:00.000Z')
+
 type StockSeed = Omit<
   StockInfo,
   'description' | 'analystConsensus' | 'fairValue' | 'riskLevel'
@@ -451,7 +453,7 @@ export function getLivePrice(seedOrTicker: StockSeed | string, step: number): St
     high,
     low,
     volume: Math.round((seed.marketCap / seed.basePrice / 10000) * (1 + Math.abs(changePct) / 3)),
-    updatedAt: new Date().toISOString(),
+    updatedAt: new Date(DEMO_NOW.getTime() + step * 5000).toISOString(),
     change,
     changePct,
   }
@@ -486,7 +488,7 @@ export function getHistory(seedOrTicker: StockSeed | string, step: number, point
     const low = round(Math.min(open, close) * 0.992)
 
     return {
-      time: subDays(new Date(), points - index - 1).toISOString(),
+      time: subDays(DEMO_NOW, points - index - 1).toISOString(),
       open,
       high,
       low,
@@ -515,9 +517,9 @@ function getFinancials(seed: StockSeed): FinancialStatement[] {
 function getAnalysts(seed: StockSeed, step: number): AnalystCall[] {
   const base = getLivePrice(seed, step).current
   return [
-    { broker: 'Motilal Oswal', rating: 'Buy', targetPrice: round(base * 1.11), upsidePct: 11, publishedAt: subDays(new Date(), 3).toISOString() },
-    { broker: 'ICICI Direct', rating: seed.analystConsensus, targetPrice: round(base * 1.08), upsidePct: 8, publishedAt: subDays(new Date(), 8).toISOString() },
-    { broker: 'HDFC Securities', rating: 'Hold', targetPrice: round(base * 1.03), upsidePct: 3, publishedAt: subDays(new Date(), 16).toISOString() },
+    { broker: 'Motilal Oswal', rating: 'Buy', targetPrice: round(base * 1.11), upsidePct: 11, publishedAt: subDays(DEMO_NOW, 3).toISOString() },
+    { broker: 'ICICI Direct', rating: seed.analystConsensus, targetPrice: round(base * 1.08), upsidePct: 8, publishedAt: subDays(DEMO_NOW, 8).toISOString() },
+    { broker: 'HDFC Securities', rating: 'Hold', targetPrice: round(base * 1.03), upsidePct: 3, publishedAt: subDays(DEMO_NOW, 16).toISOString() },
   ]
 }
 
@@ -532,9 +534,9 @@ function getForecasts(seed: StockSeed): ForecastPoint[] {
 
 function getEvents(seed: StockSeed): CorporateEvent[] {
   return [
-    { type: 'Results', title: `${seed.name} Q1 earnings`, date: subDays(new Date(), -12).toISOString(), impact: 'neutral' },
-    { type: 'Conference Call', title: 'Management commentary on margin outlook', date: subDays(new Date(), 4).toISOString(), impact: 'positive' },
-    { type: 'Corporate Action', title: 'Dividend record date announced', date: subDays(new Date(), 18).toISOString(), impact: 'positive' },
+    { type: 'Results', title: `${seed.name} Q1 earnings`, date: subDays(DEMO_NOW, -12).toISOString(), impact: 'neutral' },
+    { type: 'Conference Call', title: 'Management commentary on margin outlook', date: subDays(DEMO_NOW, 4).toISOString(), impact: 'positive' },
+    { type: 'Corporate Action', title: 'Dividend record date announced', date: subDays(DEMO_NOW, 18).toISOString(), impact: 'positive' },
   ]
 }
 
@@ -545,7 +547,7 @@ function getNews(seed: StockSeed): NewsItem[] {
       source: 'Market Pulse',
       headline: `${seed.name} gains on stronger than expected operating momentum`,
       summary: `Investors are responding to improved demand signals, margin resilience, and steadier institutional flows.`,
-      publishedAt: subDays(new Date(), 1).toISOString(),
+      publishedAt: subDays(DEMO_NOW, 1).toISOString(),
       category: 'Results',
     },
     {
@@ -553,7 +555,7 @@ function getNews(seed: StockSeed): NewsItem[] {
       source: 'Street Journal India',
       headline: `Broker desks reassess ${seed.ticker} after sector rotation`,
       summary: `Analysts see selective upside if execution stays on track and valuation discipline is preserved.`,
-      publishedAt: subDays(new Date(), 2).toISOString(),
+      publishedAt: subDays(DEMO_NOW, 2).toISOString(),
       category: 'Analyst',
     },
     {
@@ -561,7 +563,7 @@ function getNews(seed: StockSeed): NewsItem[] {
       source: 'Exchange Wire',
       headline: `${seed.name} files update on capital allocation priorities`,
       summary: 'Management commentary points to cautious expansion with improving cash conversion.',
-      publishedAt: subDays(new Date(), 5).toISOString(),
+      publishedAt: subDays(DEMO_NOW, 5).toISOString(),
       category: 'Regulatory',
     },
   ]

@@ -67,7 +67,7 @@ export function Tooltip({ children, className, content, side = 'top' }: TooltipP
       {open ? (
         <span
           className={cn(
-            'pointer-events-none absolute z-50 max-w-[16rem] rounded-2xl border border-border bg-[var(--color-surface-strong)] px-3 py-2 text-xs leading-5 text-secondary shadow-[var(--shadow-float)] transition-all duration-150 opacity-100',
+            'pointer-events-none absolute z-50 max-w-[16rem] rounded-md border border-border bg-[var(--color-bg-elevated)] px-3 py-2 text-xs leading-5 text-secondary shadow-[var(--shadow-float)] transition-all duration-150 opacity-100',
             sideClasses[side],
           )}
           id={tooltipId}

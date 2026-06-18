@@ -43,10 +43,10 @@ export function CandlestickChart({ data, ticker, className }: CandlestickChartPr
 
   if (!hasData) {
     return (
-      <div className={cn('rounded-3xl border border-border bg-surface p-5 shadow-panel', className)}>
+      <div className={cn('rounded-lg border border-border bg-surface p-4', className)}>
         <p className="text-xs uppercase tracking-[0.2em] text-secondary">Price Action</p>
         <h3 className="mt-1 text-xl font-semibold text-primary">{ticker ? `${ticker} candlestick tape` : 'Candlestick tape'}</h3>
-        <div className="mt-5 rounded-3xl border border-dashed border-border bg-base px-4 py-12 text-center text-sm text-secondary">
+        <div className="mt-4 rounded-lg border border-dashed border-border bg-base px-4 py-12 text-center text-sm text-secondary">
           Price history is unavailable for this chart.
         </div>
       </div>
@@ -71,7 +71,7 @@ export function CandlestickChart({ data, ticker, className }: CandlestickChartPr
   }
 
   return (
-    <div className={cn('rounded-3xl border border-border bg-surface p-5 shadow-panel', className)}>
+    <div className={cn('rounded-lg border border-border bg-surface p-4', className)}>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.2em] text-secondary">Price Action</p>
@@ -82,14 +82,14 @@ export function CandlestickChart({ data, ticker, className }: CandlestickChartPr
           <span className={cn('text-sm font-medium', periodMove >= 0 ? 'text-gain' : 'text-loss')}>
             {formatPct(periodMove)}
           </span>
-          <div className="inline-flex rounded-full border border-border bg-base p-1">
+          <div className="inline-flex rounded-md border border-border bg-base p-1">
             {(['2W', '1M', 'ALL'] as const).map((item) => (
               <button
                 key={item}
                 type="button"
                 onClick={() => setRange(item)}
                 className={cn(
-                  'rounded-full px-3 py-2 text-sm font-medium transition',
+                  'rounded-md px-3 py-1.5 text-sm font-medium transition',
                   range === item ? 'bg-elevated text-primary' : 'text-secondary hover:text-primary',
                 )}
               >
@@ -100,7 +100,7 @@ export function CandlestickChart({ data, ticker, className }: CandlestickChartPr
         </div>
       </div>
 
-      <div className="mt-5 rounded-3xl border border-border bg-base p-4">
+      <div className="mt-4 rounded-lg border border-border bg-base p-3">
         <svg
           viewBox="0 0 720 360"
           className="h-[360px] w-full"
@@ -228,7 +228,7 @@ function ReadingTile({
   tone?: 'gain' | 'loss' | 'neutral'
 }) {
   return (
-    <div className="rounded-3xl border border-border bg-surface p-4">
+    <div className="rounded-lg border border-border bg-surface p-3">
       <p className="text-xs uppercase tracking-[0.18em] text-secondary">{label}</p>
       <p
         className={cn(

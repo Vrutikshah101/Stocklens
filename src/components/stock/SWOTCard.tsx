@@ -11,35 +11,35 @@ const sections = [
     key: 'strengths',
     label: 'Strengths',
     icon: ShieldCheck,
-    tone: 'border-emerald-500/20 bg-emerald-500/8 text-emerald-100',
+    tone: 'border-[color:var(--color-green)] bg-[color:var(--color-green-soft)] text-gain',
     bullet: 'bg-emerald-300',
   },
   {
     key: 'weaknesses',
     label: 'Weaknesses',
     icon: AlertTriangle,
-    tone: 'border-rose-500/20 bg-rose-500/8 text-rose-100',
+    tone: 'border-[color:var(--color-red)] bg-[color:var(--color-red-soft)] text-loss',
     bullet: 'bg-rose-300',
   },
   {
     key: 'opportunities',
     label: 'Opportunities',
     icon: TrendingUp,
-    tone: 'border-sky-500/20 bg-sky-500/8 text-sky-100',
+    tone: 'border-[color:var(--color-accent-blue)] bg-[color:var(--color-accent-blue-soft)] text-accent',
     bullet: 'bg-sky-300',
   },
   {
     key: 'threats',
     label: 'Threats',
     icon: Sparkles,
-    tone: 'border-amber-500/20 bg-amber-500/8 text-amber-100',
+    tone: 'border-[color:var(--color-amber)] bg-[color:var(--color-amber-soft)] text-warn',
     bullet: 'bg-amber-300',
   },
 ] as const
 
 export function SWOTCard({ swot }: SWOTCardProps) {
   return (
-    <section className="rounded-3xl border border-border bg-surface/90 p-5 shadow-panel">
+    <section className="rounded-lg border border-border bg-surface p-4">
       <div className="mb-4">
         <p className="text-xs uppercase tracking-[0.24em] text-secondary">
           Investment framing
@@ -56,9 +56,9 @@ export function SWOTCard({ swot }: SWOTCardProps) {
           const items = swot[key]
 
           return (
-            <article className={`rounded-3xl border p-4 ${tone}`} key={key}>
+            <article className={`rounded-lg border p-4 ${tone}`} key={key}>
               <div className="mb-4 flex items-center gap-3">
-                <div className="rounded-2xl border border-border bg-base/60 p-2.5">
+                <div className="rounded-md border border-border bg-base/60 p-2.5">
                   <Icon className="h-4 w-4" />
                 </div>
                 <h3 className="text-sm font-semibold uppercase tracking-[0.18em]">

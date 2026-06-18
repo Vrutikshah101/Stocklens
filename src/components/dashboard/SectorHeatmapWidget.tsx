@@ -22,10 +22,10 @@ export function SectorHeatmapWidget({
   const activeCell = cells.find((cell) => cell.sector === selectedSector) ?? strongest
 
   return (
-    <section className={cn('min-w-0 overflow-hidden rounded-3xl border border-border bg-surface p-5 shadow-panel', className)}>
+    <section className={cn('min-w-0 overflow-hidden rounded-lg border border-border bg-surface p-4 sm:p-5', className)}>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p className="text-xs uppercase tracking-[0.2em] text-secondary">Sector Rotation</p>
+          <p className="text-xs font-medium uppercase text-secondary">Sector rotation</p>
           <h3 className="mt-1 text-xl font-semibold text-primary">Heatmap pulse</h3>
           <p className="mt-2 max-w-xl text-sm text-secondary">
             Tap a sector to focus the movers table and news stream on the current pocket of strength or
@@ -37,7 +37,7 @@ export function SectorHeatmapWidget({
           <button
             type="button"
             onClick={() => onSelectSector?.(null)}
-            className="rounded-full border border-border bg-base px-3 py-2 text-sm font-medium text-secondary transition hover:border-accent hover:text-primary"
+            className="rounded-md border border-border bg-base px-3 py-2 text-sm font-medium text-secondary transition hover:border-accent hover:text-primary"
           >
             Clear filter
           </button>
@@ -45,15 +45,15 @@ export function SectorHeatmapWidget({
       </div>
 
       {activeCell ? (
-        <div className="mt-5 rounded-[28px] border border-border bg-base p-4 sm:p-5">
+        <div className="mt-5 rounded-lg border border-border bg-base p-4 sm:p-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div className="min-w-0">
-              <p className="text-xs uppercase tracking-[0.18em] text-secondary">Focused sector</p>
+              <p className="text-xs font-medium uppercase text-secondary">Focused sector</p>
               <div className="mt-2 flex flex-wrap items-center gap-3">
                 <h4 className="text-xl font-semibold text-primary">{activeCell.sector}</h4>
                 <span
                   className={cn(
-                    'rounded-full px-3 py-1.5 text-sm font-medium',
+                    'rounded-md px-3 py-1.5 text-sm font-medium',
                     activeCell.changePct >= 0 ? 'text-gain' : 'text-loss',
                   )}
                   style={{
@@ -124,8 +124,8 @@ function InsightTile({
   tone: 'gain' | 'loss'
 }) {
   return (
-    <div className="rounded-3xl border border-border bg-base p-4">
-      <p className="text-xs uppercase tracking-[0.18em] text-secondary">{label}</p>
+    <div className="rounded-lg border border-border bg-base p-4">
+      <p className="text-xs font-medium uppercase text-secondary">{label}</p>
       <p className="mt-2 text-lg font-semibold text-primary">{value}</p>
       <p className={cn('mt-1 text-sm', tone === 'gain' ? 'text-gain' : 'text-loss')}>{detail}</p>
     </div>
@@ -144,8 +144,8 @@ function SignalPill({
   tone: 'gain' | 'loss'
 }) {
   return (
-    <div className="rounded-3xl border border-border bg-surface px-4 py-3">
-      <p className="text-xs uppercase tracking-[0.18em] text-secondary">{label}</p>
+    <div className="rounded-lg border border-border bg-surface px-4 py-3">
+      <p className="text-xs font-medium uppercase text-secondary">{label}</p>
       <div className="mt-2 flex items-center justify-between gap-3">
         <p className="text-sm font-semibold text-primary">{value}</p>
         <p className={cn('text-sm font-medium', tone === 'gain' ? 'text-gain' : 'text-loss')}>{detail}</p>

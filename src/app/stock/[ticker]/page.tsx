@@ -141,8 +141,7 @@ export default function StockDetailPage({ params }: StockDetailPageProps) {
   ]
 
   return (
-    <main className="min-h-screen bg-base px-4 py-6 text-primary sm:px-6 lg:px-8">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6">
+    <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-4 text-primary">
         <StockHeader
           dvm={data.dvm}
           info={data.info}
@@ -156,29 +155,29 @@ export default function StockDetailPage({ params }: StockDetailPageProps) {
             <article
               key={title}
               className={cn(
-                'rounded-3xl border p-5 shadow-panel backdrop-blur-sm',
+                'rounded-lg border p-4',
                 tone,
               )}
             >
               <div className="flex items-start justify-between gap-3">
-                <div>
+                <div className="min-w-0">
                   <p className="text-xs uppercase tracking-[0.24em] text-current/70">
                     {title}
                   </p>
-                  <p className="mt-2 text-2xl font-semibold text-primary">
+                  <p className="mt-2 break-words font-mono text-xl font-semibold text-primary">
                     {value}
                   </p>
                 </div>
-                <div className="rounded-2xl border border-border bg-base/70 p-3 text-current">
+                <div className="rounded-md border border-border bg-base/70 p-2 text-current">
                   <Icon className="h-5 w-5" />
                 </div>
               </div>
-              <p className="mt-3 text-sm leading-6 text-secondary">{body}</p>
+              <p className="mt-3 text-sm leading-5 text-secondary">{body}</p>
             </article>
           ))}
         </section>
 
-        <section className="rounded-3xl border border-border bg-surface/90 p-2 shadow-panel backdrop-blur">
+        <section className="rounded-lg border border-border bg-surface p-1.5">
           <div
             aria-label="Stock detail sections"
             className="grid gap-2 md:grid-cols-2 xl:grid-cols-4"
@@ -191,9 +190,9 @@ export default function StockDetailPage({ params }: StockDetailPageProps) {
                 <button
                   aria-selected={isActive}
                   className={cn(
-                    'rounded-[20px] border px-4 py-4 text-left transition',
+                    'rounded-md border px-3 py-3 text-left transition',
                     isActive
-                      ? 'border-accent bg-accent/10 shadow-panel'
+                      ? 'border-accent bg-accent/10'
                       : 'border-transparent bg-transparent hover:border-border hover:bg-base/70',
                   )}
                   key={id}
@@ -204,7 +203,7 @@ export default function StockDetailPage({ params }: StockDetailPageProps) {
                   <div className="flex items-center gap-3">
                     <div
                       className={cn(
-                        'rounded-2xl border p-2.5',
+                        'rounded-md border p-2',
                         isActive
                           ? 'border-accent bg-accent/10 text-accent'
                           : 'border-border bg-base text-secondary',
@@ -226,8 +225,8 @@ export default function StockDetailPage({ params }: StockDetailPageProps) {
         </section>
 
         {activeTab === 'overview' && (
-          <div className="flex flex-col gap-6">
-            <div className="grid gap-6 xl:grid-cols-[1.6fr,0.95fr]">
+          <div className="flex flex-col gap-4">
+            <div className="grid gap-4 xl:grid-cols-[1.6fr,0.95fr]">
               <TechnicalChart
                 currentPrice={data.price.current}
                 history={data.history}
@@ -245,9 +244,9 @@ export default function StockDetailPage({ params }: StockDetailPageProps) {
 
             <SWOTCard swot={data.swot} />
 
-            <div className="grid gap-6 xl:grid-cols-[0.9fr,1.1fr]">
+            <div className="grid gap-4 xl:grid-cols-[0.9fr,1.1fr]">
               <CorporateEventsList events={data.events} />
-              <section className="rounded-3xl border border-border bg-surface/90 p-5 shadow-panel">
+              <section className="rounded-lg border border-border bg-surface p-4">
                 <div className="mb-4 flex items-center justify-between gap-3">
                   <div>
                     <p className="text-xs uppercase tracking-[0.24em] text-secondary">
@@ -257,7 +256,7 @@ export default function StockDetailPage({ params }: StockDetailPageProps) {
                       Latest headlines
                     </h2>
                   </div>
-                  <span className="rounded-full border border-border px-3 py-1 text-xs text-secondary">
+                  <span className="rounded-md border border-border px-2.5 py-1 text-xs text-secondary">
                     {data.news.length} items
                   </span>
                 </div>
@@ -272,14 +271,14 @@ export default function StockDetailPage({ params }: StockDetailPageProps) {
         )}
 
         {activeTab === 'fundamentals' && (
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-4">
             <FinancialsTable financials={data.financials} />
             <PeersTable current={peerSubject} peers={data.peers} />
           </div>
         )}
 
         {activeTab === 'street' && (
-          <div className="grid gap-6 xl:grid-cols-[1.05fr,0.95fr]">
+          <div className="grid gap-4 xl:grid-cols-[1.05fr,0.95fr]">
             <AnalystCallsTable
               analysts={data.analysts}
               currentPrice={data.price.current}
@@ -289,9 +288,9 @@ export default function StockDetailPage({ params }: StockDetailPageProps) {
         )}
 
         {activeTab === 'catalysts' && (
-          <div className="grid gap-6 xl:grid-cols-[0.9fr,1.1fr]">
+          <div className="grid gap-4 xl:grid-cols-[0.9fr,1.1fr]">
             <CorporateEventsList events={data.events} />
-            <section className="rounded-3xl border border-border bg-surface/90 p-5 shadow-panel">
+            <section className="rounded-lg border border-border bg-surface p-4">
               <div className="mb-4 flex items-center justify-between gap-3">
                 <div>
                   <p className="text-xs uppercase tracking-[0.24em] text-secondary">
@@ -301,7 +300,7 @@ export default function StockDetailPage({ params }: StockDetailPageProps) {
                     News and desk notes
                   </h2>
                 </div>
-                <span className="rounded-full border border-border px-3 py-1 text-xs text-secondary">
+                <span className="rounded-md border border-border px-2.5 py-1 text-xs text-secondary">
                   Demo coverage
                 </span>
               </div>
@@ -313,7 +312,6 @@ export default function StockDetailPage({ params }: StockDetailPageProps) {
             </section>
           </div>
         )}
-      </div>
-    </main>
+    </div>
   )
 }

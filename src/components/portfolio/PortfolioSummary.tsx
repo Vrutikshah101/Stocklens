@@ -37,16 +37,15 @@ export function PortfolioSummary({ portfolio }: PortfolioSummaryProps) {
   return (
     <section className="grid gap-4 lg:grid-cols-3">
       {cards.map((card) => (
-        <article className="rounded-3xl border border-border bg-surface/90 p-5 shadow-panel" key={card.label}>
+        <article className="rounded-lg border border-border bg-surface p-4" key={card.label}>
           <div className="flex items-center justify-between">
             <span className="text-sm text-secondary">{card.label}</span>
             <card.icon className={`h-4 w-4 ${card.tone}`} />
           </div>
-          <div className="mt-4 text-3xl font-semibold text-primary">{card.value}</div>
+          <div className="mt-3 break-words font-mono text-2xl font-semibold text-primary">{card.value}</div>
           <div className={`mt-2 text-sm ${card.tone}`}>{card.meta}</div>
         </article>
       ))}
     </section>
   )
 }
-

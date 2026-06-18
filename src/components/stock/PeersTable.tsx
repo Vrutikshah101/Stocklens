@@ -22,7 +22,7 @@ export function PeersTable({ current, peers }: PeersTableProps) {
   )
 
   return (
-    <section className="rounded-3xl border border-border bg-surface p-5 shadow-panel">
+    <section className="min-w-0 rounded-lg border border-border bg-surface p-4">
       <div className="mb-5 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.24em] text-secondary">
@@ -37,7 +37,7 @@ export function PeersTable({ current, peers }: PeersTableProps) {
           </p>
         </div>
         <div className="grid gap-3 md:grid-cols-2">
-          <article className="rounded-2xl border border-border bg-base p-4">
+          <article className="rounded-md border border-border bg-base p-3">
             <p className="text-xs uppercase tracking-[0.2em] text-secondary">
               Sector average P/E
             </p>
@@ -45,7 +45,7 @@ export function PeersTable({ current, peers }: PeersTableProps) {
               {sectorAveragePe.toFixed(1)}×
             </p>
           </article>
-          <article className="rounded-2xl border border-border bg-base p-4">
+          <article className="rounded-md border border-border bg-base p-3">
             <p className="text-xs uppercase tracking-[0.2em] text-secondary">
               Highest DVM
             </p>
@@ -96,12 +96,12 @@ export function PeersTable({ current, peers }: PeersTableProps) {
                   <td className="px-3 py-4">
                     <span
                       className={cn(
-                        'rounded-full border px-2.5 py-1 text-xs font-medium',
+                        'rounded-md border px-2.5 py-1 text-xs font-medium',
                         row.dvm >= 75
-                          ? 'border-emerald-500/25 bg-emerald-500/10 text-emerald-700'
+                          ? 'border-[color:var(--color-green)] bg-[color:var(--color-green-soft)] text-gain'
                           : row.dvm >= 60
-                            ? 'border-sky-500/25 bg-sky-500/10 text-sky-700'
-                            : 'border-amber-500/25 bg-amber-500/10 text-amber-700',
+                            ? 'border-[color:var(--color-accent-blue)] bg-[color:var(--color-accent-blue-soft)] text-accent'
+                            : 'border-[color:var(--color-amber)] bg-[color:var(--color-amber-soft)] text-warn',
                       )}
                     >
                       {row.dvm}
