@@ -1,4 +1,5 @@
 import { sampleMarketDataProvider } from '@/lib/providers/marketData/sampleProvider'
+import { yahooMarketDataProvider } from '@/lib/providers/marketData/yahooProvider'
 import type {
   MarketDataProvider,
   MarketDataProviderHealth,
@@ -7,6 +8,7 @@ import type {
 
 const providers: Record<MarketDataProviderName, MarketDataProvider> = {
   sample: sampleMarketDataProvider,
+  yahoo: yahooMarketDataProvider,
 }
 
 export function resolveMarketDataProvider() {

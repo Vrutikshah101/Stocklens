@@ -1,9 +1,16 @@
 import { prisma } from '@/lib/db/prisma'
 import { hasDatabaseUrl } from '@/lib/db/adapter'
+import { resolveMarketDataProvider } from '@/lib/providers/marketData/providerRegistry'
 import { getMarketOverview, type MarketOverview } from '@/lib/services/marketService'
 import type { IndexSnapshot, MarketMover, NewsItem, SectorHeatCell } from '@/types/stock'
 
 export async function getMarketOverviewFromDb(step: number): Promise<MarketOverview> {
+  const provider = resolveMarketDataProvider()
+
+  if (provider.name !== 'sample') {
+    return provider.getMarketOverview(step)
+  }
+
   if (!hasDatabaseUrl()) {
     return getMarketOverview(step)
   }

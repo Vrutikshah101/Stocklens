@@ -33,7 +33,8 @@ When real APIs are introduced, replace service internals in this order:
 
 - `src/lib/providers/marketData/types.ts` defines the provider contract for market overview, stock detail, supported tickers, and health.
 - `src/lib/providers/marketData/sampleProvider.ts` is the default provider and keeps the app deterministic.
-- `MARKET_DATA_PROVIDER=sample` is the only supported provider until a real vendor is approved.
+- `src/lib/providers/marketData/yahooProvider.ts` adds server-only unofficial Yahoo Finance quote support for Indian tickers and indices.
+- `MARKET_DATA_PROVIDER=sample` keeps deterministic sample data; `MARKET_DATA_PROVIDER=yahoo` enables live quote attempts with sample fallback.
 - `GET /api/providers/market-data/health` reports the active provider, mode, cache TTL, and health.
 
 ## Server-Side Prisma Reads

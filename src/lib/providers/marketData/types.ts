@@ -1,7 +1,7 @@
 import type { MarketOverview } from '@/lib/services/marketService'
 import type { StockDetail } from '@/types/stock'
 
-export type MarketDataProviderName = 'sample'
+export type MarketDataProviderName = 'sample' | 'yahoo'
 export type MarketDataProviderMode = 'sample' | 'live'
 
 export interface MarketDataProviderHealth {

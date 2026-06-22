@@ -303,8 +303,9 @@ Current cron contracts:
 - Add provider health checks and cache rules.
 - Acceptance: app works with provider enabled and gracefully falls back when provider fails.
 - Initial provider seam: `src/lib/providers/marketData/*` defines provider contracts and uses the deterministic `sample` provider by default.
+- Live quote option: `MARKET_DATA_PROVIDER=yahoo` enables a server-only unofficial Yahoo Finance provider with sample fallback.
 - Initial health contract: `GET /api/providers/market-data/health` reports active provider status before a live vendor is introduced.
-- Env contract: `MARKET_DATA_PROVIDER=sample` remains the only supported tracked value until a vendor key and compliance review are approved.
+- Env contract: `MARKET_DATA_PROVIDER=sample` is the safest default; `yahoo` is usable for MVP live quotes but should be replaced by an approved vendor for production-grade reliability.
 
 ### Milestone 10 — Production AI
 

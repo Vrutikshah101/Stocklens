@@ -1,9 +1,16 @@
 import { prisma } from '@/lib/db/prisma'
 import { hasDatabaseUrl } from '@/lib/db/adapter'
+import { resolveMarketDataProvider } from '@/lib/providers/marketData/providerRegistry'
 import { getStockDetailByTicker } from '@/lib/services/stockService'
 import type { StockDetail } from '@/types/stock'
 
 export async function getStockDetailFromDb(ticker: string, step: number): Promise<StockDetail> {
+  const provider = resolveMarketDataProvider()
+
+  if (provider.name !== 'sample') {
+    return provider.getStockDetail(ticker, step)
+  }
+
   if (!hasDatabaseUrl()) {
     return getStockDetailByTicker(ticker, step)
   }
