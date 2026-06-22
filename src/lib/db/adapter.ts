@@ -1,11 +1,13 @@
 import { PrismaPg } from '@prisma/adapter-pg'
 
-export function createPrismaPgAdapter() {
-  const connectionString = process.env.DATABASE_URL
+const FALLBACK_DATABASE_URL = 'postgresql://stocklens:stocklens@127.0.0.1:5432/stocklens'
 
-  if (!connectionString) {
-    throw new Error('DATABASE_URL is required to initialize Prisma.')
-  }
+export function hasDatabaseUrl() {
+  return Boolean(process.env.DATABASE_URL)
+}
+
+export function createPrismaPgAdapter() {
+  const connectionString = process.env.DATABASE_URL || FALLBACK_DATABASE_URL
 
   return new PrismaPg({ connectionString })
 }

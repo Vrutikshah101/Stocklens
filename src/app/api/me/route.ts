@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 
+import { hasDatabaseUrl } from '@/lib/db/adapter'
 import { prisma } from '@/lib/db/prisma'
 import { getDemoUserProfile } from '@/lib/services/userService'
 import {
@@ -12,6 +13,10 @@ import type { UserPlan } from '@/types/user'
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
+  if (!hasDatabaseUrl()) {
+    return NextResponse.json({ user: getDemoUserProfile() })
+  }
+
   try {
     const user = await prisma.user.findUnique({
       where: { id: DEMO_USER_ID },
@@ -26,6 +31,13 @@ export async function GET() {
 }
 
 export async function PATCH(request: Request) {
+  if (!hasDatabaseUrl()) {
+    return NextResponse.json(
+      { error: 'DATABASE_URL is not configured for profile updates' },
+      { status: 503 },
+    )
+  }
+
   const payload = await request.json().catch(() => ({})) as {
     email?: string
     name?: string

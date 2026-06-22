@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 
+import { hasDatabaseUrl } from '@/lib/db/adapter'
 import { prisma } from '@/lib/db/prisma'
 import { getScreenerTemplateCatalog } from '@/lib/services/screenerService'
 import { DEMO_USER_ID } from '@/lib/services/server/mappers'
@@ -8,6 +9,10 @@ import type { ScreenerFilter } from '@/types/screener'
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
+  if (!hasDatabaseUrl()) {
+    return NextResponse.json(getScreenerTemplateCatalog())
+  }
+
   try {
     const screeners = await prisma.screener.findMany({
       orderBy: { createdAt: 'asc' },

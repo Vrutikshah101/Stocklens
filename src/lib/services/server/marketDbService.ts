@@ -1,8 +1,13 @@
 import { prisma } from '@/lib/db/prisma'
+import { hasDatabaseUrl } from '@/lib/db/adapter'
 import { getMarketOverview, type MarketOverview } from '@/lib/services/marketService'
 import type { IndexSnapshot, MarketMover, NewsItem, SectorHeatCell } from '@/types/stock'
 
 export async function getMarketOverviewFromDb(step: number): Promise<MarketOverview> {
+  if (!hasDatabaseUrl()) {
+    return getMarketOverview(step)
+  }
+
   try {
     const stocks = await prisma.stock.findMany({
       include: {

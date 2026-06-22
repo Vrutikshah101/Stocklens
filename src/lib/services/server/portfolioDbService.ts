@@ -1,7 +1,12 @@
 import { prisma } from '@/lib/db/prisma'
+import { hasDatabaseUrl } from '@/lib/db/adapter'
 import { getInitialPortfolioTransactions, getPortfolioOptions } from '@/lib/services/portfolioService'
 
 export async function getPortfolioOptionsFromDb(userId: string) {
+  if (!hasDatabaseUrl()) {
+    return getPortfolioOptions()
+  }
+
   try {
     const accounts = await prisma.portfolioAccount.findMany({
       orderBy: { createdAt: 'asc' },
@@ -23,6 +28,10 @@ export async function getPortfolioOptionsFromDb(userId: string) {
 }
 
 export async function getPortfolioTransactionsFromDb(portfolioId?: string) {
+  if (!hasDatabaseUrl()) {
+    return getInitialPortfolioTransactions()
+  }
+
   try {
     if (!portfolioId) {
       return getInitialPortfolioTransactions()

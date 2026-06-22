@@ -1,8 +1,13 @@
 import { prisma } from '@/lib/db/prisma'
+import { hasDatabaseUrl } from '@/lib/db/adapter'
 import { getStockDetailByTicker } from '@/lib/services/stockService'
 import type { StockDetail } from '@/types/stock'
 
 export async function getStockDetailFromDb(ticker: string, step: number): Promise<StockDetail> {
+  if (!hasDatabaseUrl()) {
+    return getStockDetailByTicker(ticker, step)
+  }
+
   try {
     const stock = await prisma.stock.findUnique({
       include: {

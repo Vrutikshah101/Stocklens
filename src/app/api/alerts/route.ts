@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 
+import { hasDatabaseUrl } from '@/lib/db/adapter'
 import { prisma } from '@/lib/db/prisma'
 import { getInitialAlerts } from '@/lib/services/alertService'
 import {
@@ -30,6 +31,10 @@ function toAlertRecord(alert: Awaited<ReturnType<typeof prisma.alert.findMany>>[
 }
 
 export async function GET() {
+  if (!hasDatabaseUrl()) {
+    return NextResponse.json({ alerts: getInitialAlerts() })
+  }
+
   try {
     const alerts = await prisma.alert.findMany({
       orderBy: { createdAt: 'desc' },
@@ -45,6 +50,13 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  if (!hasDatabaseUrl()) {
+    return NextResponse.json(
+      { error: 'DATABASE_URL is not configured for alert writes' },
+      { status: 503 },
+    )
+  }
+
   const payload = await request.json() as Omit<AlertRecord, 'id' | 'createdAt' | 'status'>
   const alert = await prisma.alert.create({
     data: {

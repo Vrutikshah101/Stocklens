@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 
+import { hasDatabaseUrl } from '@/lib/db/adapter'
 import { prisma } from '@/lib/db/prisma'
 import { getInitialPortfolioTransactions, getPortfolioOptions } from '@/lib/services/portfolioService'
 import { DEMO_USER_ID } from '@/lib/services/server/mappers'
@@ -7,6 +8,13 @@ import { DEMO_USER_ID } from '@/lib/services/server/mappers'
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
+  if (!hasDatabaseUrl()) {
+    return NextResponse.json({
+      portfolios: getPortfolioOptions(),
+      transactions: getInitialPortfolioTransactions(),
+    })
+  }
+
   try {
     const accounts = await prisma.portfolioAccount.findMany({
       include: {

@@ -1,8 +1,17 @@
 import { prisma } from '@/lib/db/prisma'
+import { hasDatabaseUrl } from '@/lib/db/adapter'
 import { getMarketDataProviderHealth } from '@/lib/providers/marketData/providerRegistry'
 
 async function getDatabaseHealth() {
   const startedAt = performance.now()
+
+  if (!hasDatabaseUrl()) {
+    return {
+      error: 'DATABASE_URL is not configured',
+      latencyMs: Math.round(performance.now() - startedAt),
+      ok: false,
+    }
+  }
 
   try {
     await prisma.$queryRaw`SELECT 1`

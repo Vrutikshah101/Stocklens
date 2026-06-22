@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 
+import { hasDatabaseUrl } from '@/lib/db/adapter'
 import { prisma } from '@/lib/db/prisma'
 import { getInitialWatchlistTickers } from '@/lib/services/watchlistService'
 import { DEMO_USER_ID } from '@/lib/services/server/mappers'
@@ -7,6 +8,10 @@ import { DEMO_USER_ID } from '@/lib/services/server/mappers'
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
+  if (!hasDatabaseUrl()) {
+    return NextResponse.json({ tickers: getInitialWatchlistTickers() })
+  }
+
   try {
     const watchlist = await prisma.watchlist.findFirst({
       include: {
@@ -29,6 +34,13 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  if (!hasDatabaseUrl()) {
+    return NextResponse.json(
+      { error: 'DATABASE_URL is not configured for watchlist writes' },
+      { status: 503 },
+    )
+  }
+
   const body = await request.json() as { ticker?: string }
   const ticker = body.ticker?.toUpperCase()
 
