@@ -19,13 +19,13 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    'border border-[#2f81f7] bg-[#1f6feb] text-white hover:bg-[#2f81f7]',
+    'border border-accent bg-accent text-white shadow-sm hover:brightness-110',
   secondary:
-    'border border-border bg-[var(--color-bg-elevated)] text-primary hover:bg-[#30363d]',
+    'border border-border bg-surface text-primary shadow-sm hover:bg-[var(--color-surface-soft)]',
   ghost: 'bg-transparent text-secondary hover:bg-[var(--color-surface-soft)] hover:text-primary',
   outline: 'border border-border bg-transparent text-primary hover:border-[var(--color-border-strong)] hover:bg-[var(--color-surface-soft)]',
   danger:
-    'border border-[#f85149] bg-[#da3633] text-white hover:bg-[#f85149]',
+    'border border-loss bg-loss text-white hover:brightness-110',
 }
 
 const sizeClasses: Record<ButtonSize, string> = {

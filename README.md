@@ -18,6 +18,22 @@ pnpm build
 pnpm start
 ```
 
+## AI development harness
+
+StockLens uses an AI development harness for planning, review, and quality gates. Nex AGI `nex-agi/nex-n2-pro:free` can be used through OpenRouter as a secondary drafting agent only; it is not a production app runtime.
+
+```bash
+pnpm harness:brief -- "revamp stock dashboard"
+pnpm harness:nex -- "review this task brief"
+pnpm quality
+```
+
+See `files/AI_DEVELOPMENT_HARNESS.md` for agent roles, MCP usage, hooks, and acceptance checks.
+
+## Full-stack development plan
+
+The frontend in Git is treated as the approved UI contract. See `files/FULLSTACK_DEVELOPMENT_PLAN.md` for the backend, database, API, auth, real-data, AI, and Vercel roadmap.
+
 ## Deploy to Vercel
 
 ### Option 1: GitHub + Vercel
@@ -55,5 +71,10 @@ vercel --prod
 
 ## Environment variables
 
-This project currently uses sample frontend data and does not require production environment variables by default.
+This project currently uses sample market data by default.
 
+- `DATABASE_URL` is required when using the Prisma-backed API routes.
+- `MARKET_DATA_PROVIDER=sample` keeps the market provider deterministic until a live vendor is approved.
+- `CRON_SECRET` is recommended for protected Vercel cron routes.
+- `API_TIMING_LOGS=true` enables lightweight server-side timing logs for selected API routes.
+- OpenRouter variables are optional and only used by the local AI development harness.

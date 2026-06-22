@@ -2,9 +2,11 @@
 
 import { CalendarRange } from 'lucide-react'
 
-import { DEMO_IPOS } from '@/lib/utils/constants'
+import { getIpoCalendar } from '@/lib/services/ipoService'
 
 export default function IpoPage() {
+  const ipos = getIpoCalendar()
+
   return (
     <div className="space-y-4">
       <section className="rounded-lg border border-border bg-surface p-4">
@@ -22,7 +24,7 @@ export default function IpoPage() {
       </section>
 
       <section className="grid gap-4 lg:grid-cols-3">
-        {DEMO_IPOS.map((ipo) => (
+        {ipos.map((ipo) => (
           <article className="rounded-lg border border-border bg-surface p-4" key={ipo.name}>
             <div className="flex items-center justify-between">
               <div className="text-lg font-semibold text-primary">{ipo.name}</div>

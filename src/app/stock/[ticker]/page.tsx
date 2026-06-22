@@ -72,17 +72,13 @@ export default function StockDetailPage({ params }: StockDetailPageProps) {
     return sanitized || 'RELIANCE'
   }, [params.ticker])
 
-  const { data, isLoading, error } = useStockData(requestedTicker)
+  const { data, isLoading } = useStockData(requestedTicker)
   const marketState = useMarketStatus()
   const [activeTab, setActiveTab] = useState<StockTab>('overview')
 
   useEffect(() => {
     setActiveTab('overview')
   }, [requestedTicker])
-
-  if (error) {
-    throw new Error(error)
-  }
 
   if (isLoading) {
     return <StockPageSkeleton />

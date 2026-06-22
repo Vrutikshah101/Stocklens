@@ -10,12 +10,12 @@ export const metadata: Metadata = {
     default: 'StockLens',
     template: '%s · StockLens',
   },
-  description: 'A calm, dark-first stock analytics prototype for Indian market workflows.',
+  description: 'A polished stock analytics prototype for Indian market workflows.',
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html data-theme="dark" lang="en" suppressHydrationWarning>
+    <html data-theme="light" lang="en" suppressHydrationWarning>
       <body className="min-h-screen bg-base font-sans text-primary">
         <Providers>{children}</Providers>
       </body>

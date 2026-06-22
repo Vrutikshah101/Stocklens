@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react'
 import { Bot, Send, Sparkles } from 'lucide-react'
 
-import { DEMO_CHAT_SUGGESTIONS } from '@/lib/utils/constants'
+import { getMarketMindSuggestions } from '@/lib/services/aiHarnessService'
 import { cn } from '@/lib/utils/formatters'
 
 const STARTER_MESSAGE =
@@ -13,7 +13,7 @@ export function MarketMindChat() {
   const [messages, setMessages] = useState<string[]>([STARTER_MESSAGE])
   const [prompt, setPrompt] = useState('')
 
-  const suggestions = useMemo(() => DEMO_CHAT_SUGGESTIONS, [])
+  const suggestions = useMemo(() => getMarketMindSuggestions(), [])
 
   const respond = (nextPrompt: string) => {
     if (!nextPrompt.trim()) {

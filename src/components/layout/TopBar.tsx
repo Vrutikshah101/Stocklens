@@ -15,7 +15,8 @@ import {
 } from 'lucide-react'
 
 import { useMarketStatus } from '@/hooks/useMarketStatus'
-import { getLivePrice, getMarketIndices, searchStocks } from '@/lib/utils/constants'
+import { getMarketIndexSnapshots } from '@/lib/services/marketService'
+import { getStockLivePrice, searchStockUniverse } from '@/lib/services/stockService'
 import { cn, formatCurrency, formatPct } from '@/lib/utils/formatters'
 import { useUIStore } from '@/store/uiStore'
 import type { UserProfile } from '@/types/user'
@@ -77,14 +78,14 @@ export function TopBar({ user }: TopBarProps) {
 
   const suggestions = useMemo(
     () =>
-      searchStocks(query).map((stock) => ({
+      searchStockUniverse(query).map((stock) => ({
         ...stock,
-        price: getLivePrice(stock.ticker, step),
+        price: getStockLivePrice(stock.ticker, step),
       })),
     [query, step],
   )
 
-  const indices = useMemo(() => getMarketIndices(step).slice(0, 3), [step])
+  const indices = useMemo(() => getMarketIndexSnapshots(step).slice(0, 3), [step])
   const topBarOffset = sidebarOpen ? 'lg:left-[15rem]' : 'lg:left-[4.75rem]'
 
   const selectSuggestion = (ticker: string) => {
@@ -122,7 +123,7 @@ export function TopBar({ user }: TopBarProps) {
   }
 
   return (
-    <header className={cn('fixed inset-x-0 top-0 z-30 border-b border-[#30363d] bg-[#161b22] transition-[left] duration-300 lg:right-0', topBarOffset)}>
+    <header className={cn('fixed inset-x-0 top-0 z-30 border-b border-border bg-surface/92 shadow-[0_10px_30px_rgba(15,23,42,0.06)] backdrop-blur-xl transition-[left] duration-300 lg:right-0', topBarOffset)}>
       <div className="mx-auto flex h-[52px] max-w-[1440px] items-center gap-3 px-3 md:px-5">
         <Button
           className="shrink-0"
@@ -134,7 +135,7 @@ export function TopBar({ user }: TopBarProps) {
 
         <div className="relative flex-1" ref={rootRef}>
           <Input
-            className="h-8 rounded-md border-[#30363d] bg-[#0d1117] pr-12 text-[13px] text-[#e6edf3]"
+            className="h-8 rounded-md border-border bg-base pr-12 text-[13px] text-primary shadow-inner"
             leading={<Search className="h-4 w-4" />}
             onChange={(event) => {
               setQuery(event.target.value)
@@ -159,7 +160,7 @@ export function TopBar({ user }: TopBarProps) {
                   <X className="h-3.5 w-3.5" />
                 </button>
               ) : (
-                <span className="hidden rounded-md border border-[#30363d] px-2 py-1 text-[10px] uppercase text-[#8b949e] md:inline-flex">
+                <span className="hidden rounded-md border border-border bg-surface px-2 py-1 text-[10px] uppercase text-secondary md:inline-flex">
                   /
                 </span>
               )
@@ -167,12 +168,12 @@ export function TopBar({ user }: TopBarProps) {
             value={query}
           />
           {open ? (
-            <div className="absolute left-0 right-0 top-[calc(100%+0.35rem)] z-50 overflow-hidden rounded-lg border border-[#30363d] bg-[#1c2128] p-1 shadow-[0_12px_32px_rgba(0,0,0,0.5)]">
+            <div className="absolute left-0 right-0 top-[calc(100%+0.35rem)] z-50 overflow-hidden rounded-xl border border-border bg-surface p-1 shadow-float">
               <div className="flex items-center justify-between px-3 py-2">
-                <p className="text-[10px] font-semibold uppercase text-[#8b949e]">
+                <p className="text-[10px] font-semibold uppercase text-secondary">
                   {query ? 'Search results' : 'Quick jump'}
                 </p>
-                <p className="text-[10px] text-[#8b949e]">Simulated market data</p>
+                <p className="text-[10px] text-secondary">Simulated market data</p>
               </div>
               <div className="space-y-1">
                 {suggestions.length ? (
@@ -184,8 +185,8 @@ export function TopBar({ user }: TopBarProps) {
                         className={cn(
                           'flex w-full items-center justify-between gap-4 rounded-md px-3 py-2.5 text-left transition',
                           index === activeIndex
-                            ? 'bg-[#21262d]'
-                            : 'hover:bg-[#21262d]',
+                            ? 'bg-[var(--color-accent-blue-soft)]'
+                            : 'hover:bg-[var(--color-surface-soft)]',
                         )}
                         key={item.ticker}
                         onClick={() => selectSuggestion(item.ticker)}
@@ -193,14 +194,14 @@ export function TopBar({ user }: TopBarProps) {
                         type="button"
                       >
                         <div className="min-w-0">
-                          <p className="text-[13px] font-semibold text-[#e6edf3]">
+                          <p className="text-[13px] font-semibold text-primary">
                             {item.ticker}
-                            <span className="ml-2 text-[#8b949e]">{item.name}</span>
+                            <span className="ml-2 text-secondary">{item.name}</span>
                           </p>
-                          <p className="truncate text-[11px] text-[#8b949e]">{item.sector}</p>
+                          <p className="truncate text-[11px] text-secondary">{item.sector}</p>
                         </div>
                         <div className="text-right">
-                          <p className="font-mono text-xs font-medium text-[#e6edf3]">{formatCurrency(item.price.current)}</p>
+                          <p className="font-mono text-xs font-medium text-primary">{formatCurrency(item.price.current)}</p>
                           <p
                             className={cn(
                               'text-xs font-medium',
@@ -214,9 +215,9 @@ export function TopBar({ user }: TopBarProps) {
                     )
                   })
                 ) : (
-                  <div className="rounded-md px-3 py-4 text-sm text-[#8b949e]">
-                    No matches yet. Try <span className="text-[#e6edf3]">RELIANCE</span> or{' '}
-                    <span className="text-[#e6edf3]">Financials</span>.
+                  <div className="rounded-md px-3 py-4 text-sm text-secondary">
+                    No matches yet. Try <span className="text-primary">RELIANCE</span> or{' '}
+                    <span className="text-primary">Financials</span>.
                   </div>
                 )}
               </div>
@@ -230,9 +231,9 @@ export function TopBar({ user }: TopBarProps) {
             const TrendIcon = positive ? TrendingUp : TrendingDown
 
             return (
-              <div className="rounded-md bg-[#21262d] px-3 py-1.5" key={index.symbol}>
+              <div className="rounded-lg border border-border bg-base px-3 py-1.5 shadow-sm" key={index.symbol}>
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-medium text-[#8b949e]">{index.symbol}</span>
+                  <span className="text-[10px] font-medium text-secondary">{index.symbol}</span>
                   <TrendIcon
                     className={cn(
                       'h-3.5 w-3.5',
@@ -240,7 +241,7 @@ export function TopBar({ user }: TopBarProps) {
                     )}
                   />
                 </div>
-                <p className="mt-1 font-mono text-[11px] text-[#e6edf3]">
+                <p className="mt-1 font-mono text-[11px] text-primary">
                   {formatCurrency(index.value)} · {formatPct(index.changePct)}
                 </p>
               </div>

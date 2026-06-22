@@ -3,7 +3,8 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
 
-import { DEMO_USER } from '@/lib/utils/constants'
+import { fetchJson } from '@/lib/services/clientApi'
+import { getDemoUserProfile } from '@/lib/services/userService'
 import { cn } from '@/lib/utils/formatters'
 import { useUIStore } from '@/store/uiStore'
 import type { UserProfile } from '@/types/user'
@@ -24,15 +25,17 @@ function readStoredUser() {
   const raw = window.localStorage.getItem(AUTH_KEY)
 
   if (!raw) {
-    window.localStorage.setItem(AUTH_KEY, JSON.stringify(DEMO_USER))
-    return DEMO_USER
+    const demoUser = getDemoUserProfile()
+    window.localStorage.setItem(AUTH_KEY, JSON.stringify(demoUser))
+    return demoUser
   }
 
   try {
     return JSON.parse(raw) as UserProfile
   } catch {
-    window.localStorage.setItem(AUTH_KEY, JSON.stringify(DEMO_USER))
-    return DEMO_USER
+    const demoUser = getDemoUserProfile()
+    window.localStorage.setItem(AUTH_KEY, JSON.stringify(demoUser))
+    return demoUser
   }
 }
 
@@ -54,6 +57,13 @@ export function Providers({ children }: { children: ReactNode }) {
 
     setUser(readStoredUser())
     setShellReady(true)
+
+    fetchJson<{ user: UserProfile }>('/api/me')
+      .then((payload) => {
+        window.localStorage.setItem(AUTH_KEY, JSON.stringify(payload.user))
+        setUser(payload.user)
+      })
+      .catch(() => undefined)
   }, [setSidebarOpen])
 
   useEffect(() => {
@@ -96,7 +106,7 @@ export function Providers({ children }: { children: ReactNode }) {
       <Sidebar user={user} />
       <TopBar user={user} />
       <div className={cn('relative flex min-h-screen flex-col transition-[padding] duration-300', mainWidthClass)}>
-        <main className="flex-1 bg-[#0d1117] px-4 pb-24 pt-20 md:px-5 lg:px-6 lg:pb-8 lg:pt-20">
+        <main className="flex-1 bg-base px-4 pb-24 pt-20 md:px-5 lg:px-6 lg:pb-8 lg:pt-20">
           <div className={cn('mx-auto w-full', contentWidthClass)}>{children}</div>
         </main>
         <BottomNav />

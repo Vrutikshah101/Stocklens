@@ -50,7 +50,7 @@ export function SectorHeatmapWidget({
             <div className="min-w-0">
               <p className="text-xs font-medium uppercase text-secondary">Focused sector</p>
               <div className="mt-2 flex flex-wrap items-center gap-3">
-                <h4 className="text-xl font-semibold text-primary">{activeCell.sector}</h4>
+                <h4 className="break-words text-xl font-semibold text-primary">{activeCell.sector}</h4>
                 <span
                   className={cn(
                     'rounded-md px-3 py-1.5 text-sm font-medium',
@@ -68,7 +68,7 @@ export function SectorHeatmapWidget({
               </div>
               <p className="mt-3 text-sm leading-6 text-secondary">
                 Leadership is concentrated in{' '}
-                <span className="font-medium text-primary">{activeCell.leaders.join(', ')}</span>.
+                <span className="break-words font-medium text-primary">{activeCell.leaders.join(', ')}</span>.
               </p>
             </div>
 
@@ -126,7 +126,7 @@ function InsightTile({
   return (
     <div className="rounded-lg border border-border bg-base p-4">
       <p className="text-xs font-medium uppercase text-secondary">{label}</p>
-      <p className="mt-2 text-lg font-semibold text-primary">{value}</p>
+      <p className="mt-2 break-words text-lg font-semibold text-primary">{value}</p>
       <p className={cn('mt-1 text-sm', tone === 'gain' ? 'text-gain' : 'text-loss')}>{detail}</p>
     </div>
   )
@@ -147,7 +147,7 @@ function SignalPill({
     <div className="rounded-lg border border-border bg-surface px-4 py-3">
       <p className="text-xs font-medium uppercase text-secondary">{label}</p>
       <div className="mt-2 flex items-center justify-between gap-3">
-        <p className="text-sm font-semibold text-primary">{value}</p>
+        <p className="min-w-0 break-words text-sm font-semibold text-primary">{value}</p>
         <p className={cn('text-sm font-medium', tone === 'gain' ? 'text-gain' : 'text-loss')}>{detail}</p>
       </div>
     </div>

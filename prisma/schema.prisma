@@ -1,0 +1,329 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserPlan {
+  DEMO
+  PRO
+  ELITE
+}
+
+enum Exchange {
+  NSE
+  BSE
+}
+
+enum TransactionType {
+  BUY
+  SELL
+  DIVIDEND
+  BONUS
+  SPLIT
+}
+
+enum AlertMetric {
+  PRICE_ABOVE
+  PRICE_BELOW
+  DVM_ABOVE
+  VOLUME_SPIKE
+  RATING_CHANGE
+  EARNINGS_DATE
+}
+
+enum AlertChannel {
+  WEB
+  EMAIL
+}
+
+enum AlertStatus {
+  ARMED
+  TRIGGERED
+  MUTED
+}
+
+enum CorporateEventImpact {
+  POSITIVE
+  NEUTRAL
+  NEGATIVE
+}
+
+enum AiRequestStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+model User {
+  id              String             @id @default(uuid())
+  authProviderId  String?            @unique
+  email           String             @unique
+  name            String?
+  avatarInitials  String?
+  plan            UserPlan           @default(DEMO)
+  preferences     Json?
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  deletedAt       DateTime?
+  aiRequests      AiRequest[]
+  alerts          Alert[]
+  alertEvents     AlertEvent[]
+  portfolioAccounts PortfolioAccount[]
+  screeners       Screener[]
+  watchlists      Watchlist[]
+
+  @@map("users")
+}
+
+model Stock {
+  id          String           @id @default(uuid())
+  ticker      String
+  exchange    Exchange
+  name        String
+  sector      String
+  industry    String?
+  description String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  dvmScores   DvmScore[]
+  events      StockEvent[]
+  financials  StockFinancial[]
+  newsItems   NewsItem[]
+  prices      StockPrice[]
+
+  @@unique([ticker, exchange])
+  @@index([sector])
+  @@map("stocks")
+}
+
+model StockPrice {
+  id            String   @id @default(uuid())
+  stockId       String
+  capturedAt    DateTime
+  current       Decimal  @db.Decimal(18, 4)
+  previousClose Decimal  @db.Decimal(18, 4)
+  open          Decimal  @db.Decimal(18, 4)
+  high          Decimal  @db.Decimal(18, 4)
+  low           Decimal  @db.Decimal(18, 4)
+  change        Decimal  @db.Decimal(18, 4)
+  changePct     Decimal  @db.Decimal(9, 4)
+  volume        BigInt
+  stock         Stock    @relation(fields: [stockId], references: [id], onDelete: Cascade)
+
+  @@index([stockId, capturedAt])
+  @@map("stock_prices")
+}
+
+model StockFinancial {
+  id           String   @id @default(uuid())
+  stockId      String
+  period       String
+  revenue      Decimal  @db.Decimal(18, 2)
+  ebitda       Decimal  @db.Decimal(18, 2)
+  netProfit    Decimal  @db.Decimal(18, 2)
+  eps          Decimal  @db.Decimal(18, 4)
+  freeCashFlow Decimal  @db.Decimal(18, 2)
+  roe          Decimal  @db.Decimal(9, 4)
+  debtToEquity Decimal  @db.Decimal(9, 4)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  stock        Stock    @relation(fields: [stockId], references: [id], onDelete: Cascade)
+
+  @@unique([stockId, period])
+  @@map("stock_financials")
+}
+
+model StockEvent {
+  id        String               @id @default(uuid())
+  stockId   String
+  type      String
+  title     String
+  eventDate DateTime
+  impact    CorporateEventImpact @default(NEUTRAL)
+  createdAt DateTime             @default(now())
+  stock     Stock                @relation(fields: [stockId], references: [id], onDelete: Cascade)
+
+  @@index([stockId, eventDate])
+  @@map("stock_events")
+}
+
+model NewsItem {
+  id          String   @id @default(uuid())
+  stockId     String?
+  source      String
+  headline    String
+  summary     String
+  category    String
+  publishedAt DateTime
+  url         String?
+  createdAt   DateTime @default(now())
+  stock       Stock?   @relation(fields: [stockId], references: [id], onDelete: SetNull)
+
+  @@index([stockId, publishedAt])
+  @@index([category])
+  @@map("news_items")
+}
+
+model DvmScore {
+  id         String   @id @default(uuid())
+  stockId    String
+  capturedAt DateTime @default(now())
+  durability Int
+  valuation  Int
+  momentum   Int
+  composite  Int
+  label      String
+  tone       String
+  stock      Stock    @relation(fields: [stockId], references: [id], onDelete: Cascade)
+
+  @@index([stockId, capturedAt])
+  @@map("dvm_scores")
+}
+
+model Screener {
+  id             String    @id @default(uuid())
+  userId         String
+  name           String
+  description    String?
+  filters        Json
+  lastRunAt      DateTime?
+  lastResultCount Int?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  deletedAt      DateTime?
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("screeners")
+}
+
+model Watchlist {
+  id        String          @id @default(uuid())
+  userId    String
+  name      String
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  deletedAt DateTime?
+  items     WatchlistItem[]
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("watchlists")
+}
+
+model WatchlistItem {
+  id          String    @id @default(uuid())
+  watchlistId String
+  ticker      String
+  exchange    Exchange  @default(NSE)
+  addedAt     DateTime  @default(now())
+  watchlist   Watchlist @relation(fields: [watchlistId], references: [id], onDelete: Cascade)
+
+  @@unique([watchlistId, ticker, exchange])
+  @@map("watchlist_items")
+}
+
+model PortfolioAccount {
+  id           String                 @id @default(uuid())
+  userId       String
+  name         String
+  strategy     String?
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
+  deletedAt    DateTime?
+  snapshots    PortfolioSnapshot[]
+  transactions PortfolioTransaction[]
+  user         User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("portfolio_accounts")
+}
+
+model PortfolioTransaction {
+  id          String           @id @default(uuid())
+  portfolioId String
+  ticker      String
+  exchange    Exchange         @default(NSE)
+  type        TransactionType
+  quantity    Decimal          @db.Decimal(18, 6)
+  price       Decimal          @db.Decimal(18, 4)
+  tradeDate   DateTime
+  notes       String?
+  createdAt   DateTime         @default(now())
+  portfolio   PortfolioAccount @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+
+  @@index([portfolioId, tradeDate])
+  @@map("portfolio_transactions")
+}
+
+model PortfolioSnapshot {
+  id          String           @id @default(uuid())
+  portfolioId String
+  capturedAt  DateTime
+  nav         Decimal          @db.Decimal(18, 4)
+  invested    Decimal          @db.Decimal(18, 4)
+  totalPnl    Decimal          @db.Decimal(18, 4)
+  totalPnlPct Decimal          @db.Decimal(9, 4)
+  dayChange   Decimal          @db.Decimal(18, 4)
+  xirr        Decimal?         @db.Decimal(9, 4)
+  portfolio   PortfolioAccount @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+
+  @@index([portfolioId, capturedAt])
+  @@map("portfolio_snapshots")
+}
+
+model Alert {
+  id              String        @id @default(uuid())
+  userId          String
+  ticker          String
+  exchange        Exchange      @default(NSE)
+  title           String
+  metric          AlertMetric
+  threshold       Decimal       @db.Decimal(18, 4)
+  channels        AlertChannel[]
+  active          Boolean       @default(true)
+  status          AlertStatus   @default(ARMED)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  lastTriggeredAt DateTime?
+  events          AlertEvent[]
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([ticker, exchange])
+  @@map("alerts")
+}
+
+model AlertEvent {
+  id          String   @id @default(uuid())
+  alertId     String
+  userId      String
+  triggeredAt DateTime @default(now())
+  payload     Json?
+  alert       Alert    @relation(fields: [alertId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([alertId, triggeredAt])
+  @@index([userId])
+  @@map("alert_events")
+}
+
+model AiRequest {
+  id           String          @id @default(uuid())
+  userId       String?
+  feature      String
+  model        String
+  status       AiRequestStatus @default(PENDING)
+  promptTokens Int?
+  outputTokens Int?
+  error        String?
+  createdAt    DateTime        @default(now())
+  completedAt  DateTime?
+  user         User?           @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+  @@map("ai_requests")
+}

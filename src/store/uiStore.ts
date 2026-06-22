@@ -17,7 +17,7 @@ interface UIStore {
 export const useUIStore = create<UIStore>((set) => ({
   sidebarOpen: true,
   marketMindOpen: true,
-  theme: 'dark',
+  theme: 'light',
   toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
   setSidebarOpen: (value) => set({ sidebarOpen: value }),
   toggleMarketMind: () => set((state) => ({ marketMindOpen: !state.marketMindOpen })),

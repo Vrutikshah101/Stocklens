@@ -148,7 +148,7 @@ export default function RegisterPage() {
                   Create demo workspace
                 </Button>
                 <Link
-                  className="inline-flex h-9 items-center justify-center rounded-md border border-border bg-[var(--color-bg-elevated)] px-4 text-sm font-medium text-primary transition hover:bg-[#30363d]"
+                  className="inline-flex h-9 items-center justify-center rounded-md border border-border bg-[var(--color-bg-elevated)] px-4 text-sm font-medium text-primary transition hover:bg-[var(--color-surface-soft)]"
                   href="/login"
                 >
                   Already have a session?

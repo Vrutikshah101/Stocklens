@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 
-import { getLivePrice } from '@/lib/utils/constants'
+import { getStockLivePrice } from '@/lib/services/stockService'
 
 export function useStockPrice(ticker: string) {
   const [step, setStep] = useState(0)
@@ -16,7 +16,7 @@ export function useStockPrice(ticker: string) {
     return () => window.clearInterval(timer)
   }, [])
 
-  const price = useMemo(() => getLivePrice(ticker, step), [step, ticker])
+  const price = useMemo(() => getStockLivePrice(ticker, step), [step, ticker])
 
   return {
     price,
@@ -24,4 +24,3 @@ export function useStockPrice(ticker: string) {
     isPositive: price.change >= 0,
   }
 }
-

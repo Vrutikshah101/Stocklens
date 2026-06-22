@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react'
 
-import { DEMO_USER } from '@/lib/utils/constants'
+import { fetchJson, sendJson } from '@/lib/services/clientApi'
+import { getDemoUserProfile } from '@/lib/services/userService'
 import type { UserPlan, UserProfile } from '@/types/user'
 
 const AUTH_KEY = 'stocklens-user'
@@ -13,22 +14,42 @@ export function useAuth() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
+    let active = true
+
     const sync = () => {
       const raw = window.localStorage.getItem(AUTH_KEY)
       if (raw) {
         setUser(JSON.parse(raw) as UserProfile)
       } else {
-        window.localStorage.setItem(AUTH_KEY, JSON.stringify(DEMO_USER))
-        setUser(DEMO_USER)
+        window.localStorage.setItem(AUTH_KEY, JSON.stringify(getDemoUserProfile()))
+        setUser(getDemoUserProfile())
       }
       setIsLoading(false)
     }
 
     sync()
+
+    fetchJson<{ user: UserProfile }>('/api/me')
+      .then((payload) => {
+        if (!active) {
+          return
+        }
+
+        setUser(payload.user)
+        window.localStorage.setItem(AUTH_KEY, JSON.stringify(payload.user))
+        setIsLoading(false)
+      })
+      .catch(() => {
+        if (active) {
+          setIsLoading(false)
+        }
+      })
+
     window.addEventListener('storage', sync)
     window.addEventListener(AUTH_EVENT, sync)
 
     return () => {
+      active = false
       window.removeEventListener('storage', sync)
       window.removeEventListener(AUTH_EVENT, sync)
     }
@@ -45,7 +66,14 @@ export function useAuth() {
   }
 
   const signIn = (plan: UserPlan = 'PRO') => {
-    saveUser({ ...DEMO_USER, plan })
+    const nextUser = { ...getDemoUserProfile(), plan }
+    saveUser(nextUser)
+    sendJson<{ user: UserProfile }>('/api/me', {
+      body: JSON.stringify({ plan }),
+      method: 'PATCH',
+    })
+      .then((payload) => saveUser(payload.user))
+      .catch(() => undefined)
   }
 
   const signOut = () => saveUser(null)
@@ -55,7 +83,14 @@ export function useAuth() {
       return
     }
 
-    saveUser({ ...user, plan })
+    const nextUser = { ...user, plan }
+    saveUser(nextUser)
+    sendJson<{ user: UserProfile }>('/api/me', {
+      body: JSON.stringify({ plan }),
+      method: 'PATCH',
+    })
+      .then((payload) => saveUser(payload.user))
+      .catch(() => undefined)
   }
 
   return {

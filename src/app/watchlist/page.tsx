@@ -3,13 +3,13 @@
 import Link from 'next/link'
 import { Eye, Plus } from 'lucide-react'
 
-import { searchStocks } from '@/lib/utils/constants'
+import { searchStockUniverse } from '@/lib/services/stockService'
 import { formatCurrency, formatPct } from '@/lib/utils/formatters'
 import { useWatchlist } from '@/hooks/useWatchlist'
 
 export default function WatchlistPage() {
   const { rows, addTicker, removeTicker } = useWatchlist()
-  const suggestions = searchStocks('')
+  const suggestions = searchStockUniverse('')
 
   return (
     <div className="space-y-4">

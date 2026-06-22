@@ -2,7 +2,9 @@
 
 import { useEffect, useMemo, useState } from 'react'
 
-import { DEMO_TRANSACTIONS, getPortfolioNames, getStockDetail } from '@/lib/utils/constants'
+import { fetchJson, sendJson } from '@/lib/services/clientApi'
+import { getInitialPortfolioTransactions, getPortfolioOptions } from '@/lib/services/portfolioService'
+import { getStockDetailByTicker } from '@/lib/services/stockService'
 import { usePortfolioStore } from '@/store/portfolioStore'
 import type {
   PortfolioHolding,
@@ -16,7 +18,8 @@ const DEMO_NOW = new Date('2026-06-18T07:00:00.000Z')
 
 export function usePortfolio() {
   const { selectedPortfolioId, setSelectedPortfolioId, pendingTicker, setPendingTicker } = usePortfolioStore()
-  const [transactions, setTransactions] = useState<PortfolioTransaction[]>(DEMO_TRANSACTIONS)
+  const [transactions, setTransactions] = useState<PortfolioTransaction[]>(getInitialPortfolioTransactions)
+  const [portfolioOptions, setPortfolioOptions] = useState(getPortfolioOptions)
   const [step, setStep] = useState(0)
 
   useEffect(() => {
@@ -24,13 +27,33 @@ export function usePortfolio() {
     if (raw) {
       setTransactions(JSON.parse(raw) as PortfolioTransaction[])
     }
+
+    const controller = new AbortController()
+    fetchJson<{
+      portfolios: ReturnType<typeof getPortfolioOptions>
+      selectedPortfolioId?: string
+      transactions: PortfolioTransaction[]
+    }>('/api/portfolio', controller.signal)
+      .then((payload) => {
+        setPortfolioOptions(payload.portfolios)
+        setTransactions(payload.transactions)
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload.transactions))
+        if (payload.selectedPortfolioId) {
+          setSelectedPortfolioId(payload.selectedPortfolioId)
+        }
+      })
+      .catch(() => undefined)
+
     setStep(Math.floor(Date.now() / 5000))
     const timer = window.setInterval(() => {
       setStep(Math.floor(Date.now() / 5000))
     }, 5000)
 
-    return () => window.clearInterval(timer)
-  }, [])
+    return () => {
+      controller.abort()
+      window.clearInterval(timer)
+    }
+  }, [setSelectedPortfolioId])
 
   const persist = (nextTransactions: PortfolioTransaction[]) => {
     setTransactions(nextTransactions)
@@ -38,13 +61,18 @@ export function usePortfolio() {
   }
 
   const addTransaction = (transaction: Omit<PortfolioTransaction, 'id'>) => {
-    persist([
-      {
-        ...transaction,
-        id: `txn-${Date.now()}`,
-      },
-      ...transactions,
-    ])
+    const optimisticTransaction = {
+      ...transaction,
+      id: `txn-${Date.now()}`,
+    }
+    persist([optimisticTransaction, ...transactions])
+
+    sendJson<PortfolioTransaction>('/api/portfolio/transactions', {
+      body: JSON.stringify(transaction),
+      method: 'POST',
+    })
+      .then((createdTransaction) => persist([createdTransaction, ...transactions]))
+      .catch(() => undefined)
   }
 
   const holdings = useMemo<PortfolioHolding[]>(() => {
@@ -61,7 +89,7 @@ export function usePortfolio() {
     return Array.from(grouped.entries())
       .filter(([, value]) => value.quantity > 0)
       .map(([ticker, value]) => {
-        const detail = getStockDetail(ticker, step)
+        const detail = getStockDetailByTicker(ticker, step)
         const avgCost = value.invested / value.quantity
         const marketValue = detail.price.current * value.quantity
         const pnl = marketValue - value.invested
@@ -86,7 +114,7 @@ export function usePortfolio() {
     const invested = holdings.reduce((total, holding) => total + holding.invested, 0)
     const totalPnl = nav - invested
     const dayChange = holdings.reduce(
-      (total, holding) => total + (holding.currentPrice - getStockDetail(holding.ticker, Math.max(step - 1, 0)).price.current) * holding.quantity,
+      (total, holding) => total + (holding.currentPrice - getStockDetailByTicker(holding.ticker, Math.max(step - 1, 0)).price.current) * holding.quantity,
       0,
     )
 
@@ -104,7 +132,7 @@ export function usePortfolio() {
     return Array.from({ length: 30 }, (_, index) => {
       const replayStep = Math.max(step - (29 - index), 0)
       const value = transactions.reduce((total, transaction) => {
-        const detail = getStockDetail(transaction.ticker, replayStep)
+        const detail = getStockDetailByTicker(transaction.ticker, replayStep)
         return total + detail.price.current * transaction.quantity
       }, 0)
 
@@ -117,8 +145,8 @@ export function usePortfolio() {
 
   const portfolio: PortfolioModel = {
     id: selectedPortfolioId,
-    name: getPortfolioNames().find((item) => item.id === selectedPortfolioId)?.name ?? 'Core Alpha',
-    strategy: getPortfolioNames().find((item) => item.id === selectedPortfolioId)?.strategy ?? 'Quality + momentum blend',
+    name: portfolioOptions.find((item) => item.id === selectedPortfolioId)?.name ?? portfolioOptions[0]?.name ?? 'Core Alpha',
+    strategy: portfolioOptions.find((item) => item.id === selectedPortfolioId)?.strategy ?? portfolioOptions[0]?.strategy ?? 'Quality + momentum blend',
     transactions,
     holdings,
     navHistory,
@@ -127,7 +155,7 @@ export function usePortfolio() {
 
   return {
     portfolio,
-    portfolios: getPortfolioNames(),
+    portfolios: portfolioOptions,
     selectedPortfolioId,
     setSelectedPortfolioId,
     pendingTicker,

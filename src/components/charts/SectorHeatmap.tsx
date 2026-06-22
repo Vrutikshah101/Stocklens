@@ -32,7 +32,7 @@ export function SectorHeatmap({
               type="button"
               onClick={() => onSelectSector?.(cell.sector)}
               className={cn(
-                'group rounded-lg border p-4 text-left transition duration-150 hover:border-accent focus:outline-none focus:ring-2 focus:ring-accent',
+                'group min-w-0 rounded-xl border p-4 text-left transition duration-150 hover:border-accent focus:outline-none focus:ring-2 focus:ring-accent',
                 isActive ? 'ring-2 ring-accent/40' : '',
               )}
               style={{
@@ -45,7 +45,7 @@ export function SectorHeatmap({
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <p className="text-xs uppercase tracking-[0.16em] text-secondary">Sector</p>
-                  <p className="mt-1 text-base font-semibold text-primary">{cell.sector}</p>
+                  <p className="mt-1 break-words text-base font-semibold leading-6 text-primary">{cell.sector}</p>
                 </div>
                 <span className={cn('text-sm font-semibold', isPositive ? 'text-gain' : 'text-loss')}>
                   {cell.changePct > 0 ? '+' : ''}
@@ -79,7 +79,7 @@ export function SectorHeatmap({
         className={cn('hidden gap-3 md:grid', className)}
         style={{
           gridTemplateColumns: 'repeat(12, minmax(0, 1fr))',
-          gridAutoRows: '78px',
+          gridAutoRows: '112px',
         }}
       >
         {orderedCells.map((cell, index) => {
@@ -94,7 +94,7 @@ export function SectorHeatmap({
               type="button"
               onClick={() => onSelectSector?.(cell.sector)}
               className={cn(
-                'group rounded-lg border p-4 text-left transition duration-150 hover:border-accent focus:outline-none focus:ring-2 focus:ring-accent',
+                'group min-w-0 rounded-xl border p-3 text-left transition duration-150 hover:border-accent focus:outline-none focus:ring-2 focus:ring-accent lg:p-4',
                 isActive ? 'ring-2 ring-accent/40' : '',
               )}
               style={{
@@ -107,12 +107,12 @@ export function SectorHeatmap({
               }}
             >
               <div className="flex h-full flex-col justify-between gap-4">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
+                <div className="flex min-w-0 items-start justify-between gap-3">
+                  <div className="min-w-0">
                     <p className="text-xs uppercase tracking-[0.16em] text-secondary">Sector</p>
-                    <p className="mt-1 text-lg font-semibold text-primary">{cell.sector}</p>
+                    <p className="mt-1 break-words text-base font-semibold leading-6 text-primary lg:text-lg">{cell.sector}</p>
                   </div>
-                  <span className={cn('text-sm font-semibold', isPositive ? 'text-gain' : 'text-loss')}>
+                  <span className={cn('shrink-0 text-sm font-semibold', isPositive ? 'text-gain' : 'text-loss')}>
                     {cell.changePct > 0 ? '+' : ''}
                     {cell.changePct.toFixed(2)}%
                   </span>
@@ -123,7 +123,7 @@ export function SectorHeatmap({
                     {cell.leaders.map((leader) => (
                       <span
                         key={leader}
-                        className="rounded-md border border-border bg-base px-2 py-1 text-[11px] font-medium text-secondary"
+                        className="max-w-full truncate rounded-md border border-border bg-base px-2 py-1 text-[11px] font-medium text-secondary"
                       >
                         {leader}
                       </span>

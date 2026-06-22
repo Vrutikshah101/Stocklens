@@ -105,18 +105,18 @@ export function DVMScoreCard({
         ))}
       </div>
 
-      <div className="mt-5 grid gap-3 sm:grid-cols-3">
+      <div className="mt-5 grid gap-3 md:grid-cols-3">
         <div className="rounded-md border border-border bg-surface p-3">
           <p className="text-xs uppercase tracking-[0.22em] text-secondary">
             Label
           </p>
-          <p className="mt-2 text-sm font-medium text-primary">{dvm.label}</p>
+          <p className="mt-2 break-words text-sm font-medium text-primary">{dvm.label}</p>
         </div>
         <div className="rounded-md border border-border bg-surface p-3">
           <p className="text-xs uppercase tracking-[0.22em] text-secondary">
             Fair value gap
           </p>
-          <p className="mt-2 text-sm font-medium text-primary">
+          <p className="mt-2 break-words text-sm font-medium text-primary">
             {formatPct(fairValueGap)} vs {formatCurrency(fairValue)}
           </p>
         </div>
@@ -124,7 +124,7 @@ export function DVMScoreCard({
           <p className="text-xs uppercase tracking-[0.22em] text-secondary">
             Overlay
           </p>
-          <p className="mt-2 text-sm font-medium text-primary">
+          <p className="mt-2 break-words text-sm font-medium text-primary">
             {analystConsensus} consensus · {riskLevel} risk
           </p>
         </div>
