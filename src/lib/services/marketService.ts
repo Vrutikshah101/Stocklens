@@ -12,7 +12,7 @@ export interface MarketOverview {
   heatmap: SectorHeatCell[]
   news: NewsItem[]
   generatedAt: string
-  source: 'sample' | 'yahoo'
+  source: 'sample' | 'yahoo' | 'fmp' | 'twelve' | 'alpha' | 'multi'
 }
 
 export function getMarketOverview(step: number): MarketOverview {

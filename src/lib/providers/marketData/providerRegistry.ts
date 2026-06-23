@@ -1,4 +1,8 @@
+import { alphaVantageMarketDataProvider } from '@/lib/providers/marketData/alphaVantageProvider'
+import { fmpMarketDataProvider } from '@/lib/providers/marketData/fmpProvider'
+import { multiMarketDataProvider } from '@/lib/providers/marketData/multiProvider'
 import { sampleMarketDataProvider } from '@/lib/providers/marketData/sampleProvider'
+import { twelveDataMarketDataProvider } from '@/lib/providers/marketData/twelveDataProvider'
 import { yahooMarketDataProvider } from '@/lib/providers/marketData/yahooProvider'
 import type {
   MarketDataProvider,
@@ -7,7 +11,11 @@ import type {
 } from '@/lib/providers/marketData/types'
 
 const providers: Record<MarketDataProviderName, MarketDataProvider> = {
+  alpha: alphaVantageMarketDataProvider,
+  fmp: fmpMarketDataProvider,
+  multi: multiMarketDataProvider,
   sample: sampleMarketDataProvider,
+  twelve: twelveDataMarketDataProvider,
   yahoo: yahooMarketDataProvider,
 }
 

@@ -304,6 +304,8 @@ Current cron contracts:
 - Acceptance: app works with provider enabled and gracefully falls back when provider fails.
 - Initial provider seam: `src/lib/providers/marketData/*` defines provider contracts and uses the deterministic `sample` provider by default.
 - Live quote option: `MARKET_DATA_PROVIDER=yahoo` enables a server-only unofficial Yahoo Finance provider with sample fallback.
+- Multi-provider option: `MARKET_DATA_PROVIDER=multi` tries FMP, Twelve Data, Alpha Vantage, Yahoo, then sample fallback.
+- Optional server-only keys: `FMP_API_KEY`, `TWELVE_DATA_API_KEY`, and `ALPHA_VANTAGE_API_KEY`.
 - Initial health contract: `GET /api/providers/market-data/health` reports active provider status before a live vendor is introduced.
 - Env contract: `MARKET_DATA_PROVIDER=sample` is the safest default; `yahoo` is usable for MVP live quotes but should be replaced by an approved vendor for production-grade reliability.
 

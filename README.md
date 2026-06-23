@@ -76,6 +76,8 @@ This project currently uses sample market data by default.
 - `DATABASE_URL` is required when using the Prisma-backed API routes.
 - `MARKET_DATA_PROVIDER=sample` keeps the market provider deterministic.
 - `MARKET_DATA_PROVIDER=yahoo` enables server-only unofficial Yahoo Finance quote attempts with sample fallback.
+- `MARKET_DATA_PROVIDER=multi` tries FMP, Twelve Data, Alpha Vantage, Yahoo, then sample fallback.
+- `FMP_API_KEY`, `TWELVE_DATA_API_KEY`, and `ALPHA_VANTAGE_API_KEY` are server-only optional provider keys.
 - `CRON_SECRET` is recommended for protected Vercel cron routes.
 - `API_TIMING_LOGS=true` enables lightweight server-side timing logs for selected API routes.
 - OpenRouter variables are optional and only used by the local AI development harness.
